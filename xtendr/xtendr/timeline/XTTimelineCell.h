@@ -8,8 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+@class XTTimelineCell;
+
+typedef void (^faceTapBlock)(XTTimelineCell  *cell);
+
 @interface XTTimelineCell : UITableViewCell
 
+@property(nonatomic, copy) faceTapBlock    faceTapBlock;
 
 +(CGFloat)cellHeightForText:(NSString*)text withUsername:(NSString*)username;
 

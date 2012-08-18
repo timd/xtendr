@@ -21,7 +21,14 @@
 @property(readonly) TMDiskCache *userProfilePicCache;
 @property(readonly) TMDiskCache *userCoverArtCache;
 
++(XTAppDelegate*)sharedInstance;
+
+-(void)logout;
+
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
+
+-(void)switchToTimelineView;
+-(void)switchToProfileView;
 
 @end

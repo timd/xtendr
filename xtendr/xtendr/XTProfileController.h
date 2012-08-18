@@ -16,6 +16,7 @@ extern NSString *const kXTProfileValidityChangedNotification;
 +(XTProfileController*)sharedInstance;
 
 -(BOOL)isSessionValid;
+-(NSString*)accesstoken;
 
 -(void)loginWithToken:(NSString*)token;
 -(void)logout;

@@ -10,6 +10,8 @@
 
 #import "XTTimelineCell.h"
 
+#import "XTHTTPClient.h"
+
 NSString * lorem = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ut aliquam risus. Aliquam erat volutpat. Ut nibh leo, vulputate nec sollicitudin vitae, fringilla at odio. Phasellus lacinia auctor nullam.";
 
 NSString * username = @"tonymillion";
@@ -21,6 +23,7 @@ NSString * username = @"tonymillion";
 @property(strong) UIButton				*addPostButton;
 @property(strong) UIImageView			*addPostOverlayImageView;
 
+@property(strong) NSArray				*posts;
 
 @end
 
@@ -79,6 +82,7 @@ NSString * username = @"tonymillion";
 																				 48,
 																				 48)];
 	self.addPostOverlayImageView.image = [UIImage imageNamed:@"addplus"];
+	self.addPostOverlayImageView.contentMode = UIViewContentModeCenter;
 
 	[self.view addSubview:self.addPostOverlayImageView];
 	[self.view bringSubviewToFront:self.addPostOverlayImageView];
@@ -88,6 +92,26 @@ NSString * username = @"tonymillion";
 {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+	[super viewWillAppear:animated];
+
+	[[XTHTTPClient sharedClient] getPath:@"posts/stream"
+							  parameters:nil
+								 success:^(TMHTTPRequest *operation, id responseObject) {
+									 //DLog(@"login S: %@", responseObject);
+									 if(responseObject && [responseObject isKindOfClass:[NSArray class]])
+									 {
+										 self.posts = responseObject;
+										 [self.tableView reloadData];
+									 }
+								 }
+								 failure:^(TMHTTPRequest *operation, NSError *error) {
+									 DLog(@"login F: %@", operation.responseString);
+								 }];
+
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -106,23 +130,32 @@ NSString * username = @"tonymillion";
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 100;
+    return self.posts.count;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	return [XTTimelineCell cellHeightForText:lorem withUsername:username];
+	NSDictionary * post = [self.posts objectAtIndex:indexPath.row];
+	NSDictionary * user = [post objectForKey:@"user"];
+
+	DLog(@"post = %@", post);
+
+	return [XTTimelineCell cellHeightForText:[post objectForKey:@"text"]
+								withUsername:[user objectForKey:@"username"]];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	XTTimelineCell *cell = [tableView dequeueReusableCellWithIdentifier:@"timelineCell"];
 
-
-	
 	// Configure the cell...
 	//cell.timelineEntry = entry;
-	[cell setPostText:lorem username:username];
+	NSDictionary * post = [self.posts objectAtIndex:indexPath.row];
+	NSDictionary * user = [post objectForKey:@"user"];
+	//DLog(@"post = %@", post);
+
+	[cell setPostText:[post objectForKey:@"text"]
+			 username:[user objectForKey:@"username"]];
 
 	return cell;
 }

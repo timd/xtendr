@@ -9,6 +9,8 @@
 #import "XTLeftPanelViewController.h"
 #import "XTLeftPanelCell.h"
 
+#import "XTAppDelegate.h"
+
 @interface XTLeftPanelViewController ()
 
 @end
@@ -36,7 +38,6 @@
     [self.tableView registerNib:[UINib nibWithNibName:@"XTLeftPanelCell"
                                                bundle:[NSBundle mainBundle]]
          forCellReuseIdentifier:@"leftPanelCell"];
-
 }
 
 - (void)viewDidUnload
@@ -66,7 +67,7 @@
 		return 5;
 
 	if(section == 1)
-		return 1;
+		return 2;
 
 	return 0;
 }
@@ -123,20 +124,11 @@
         if(indexPath.row == 0)
         {
             cell.badge.hidden = YES;
-			/*
-			if([ZZProfileController sharedInstance].user.username.length < 20)
-			{
-				cell.textLabel.text = [ZZProfileController sharedInstance].user.username;
-			}
-			else
-			{
-			}
-			 */
-			cell.textLabel.text = NSLocalizedString(@"Timeline", @"");
+			cell.textLabel.text = NSLocalizedString(@"My Stream", @"");
         }
         else if(indexPath.row == 1)
         {
-            cell.textLabel.text = NSLocalizedString(@"Followed", @"");
+            cell.textLabel.text = NSLocalizedString(@"Global Stream", @"");
 			cell.badge.hidden = YES;
 
         }
@@ -154,14 +146,29 @@
         }
 		else if(indexPath.row == 4)
 		{
-            cell.textLabel.text = NSLocalizedString(@"Settings", @"");
+            cell.textLabel.text = NSLocalizedString(@"More Stuff", @"");
 			cell.badge.hidden = YES;
-
 		}
     }
 	else if(indexPath.section == 1)
 	{
 		if(indexPath.row == 0)
+        {
+            cell.badge.hidden	= YES;
+			cell.chevron.hidden = NO;
+			/*
+			 if([ZZProfileController sharedInstance].user.username.length < 20)
+			 {
+			 cell.textLabel.text = [ZZProfileController sharedInstance].user.username;
+			 }
+			 else
+			 {
+			 }
+			 */
+			cell.textLabel.text = NSLocalizedString(@"Settings", @"");
+        }
+		
+		if(indexPath.row == 1)
         {
             cell.badge.hidden	= YES;
 			cell.chevron.hidden = YES;
@@ -187,6 +194,24 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if(indexPath.section == 0)
+    {
+        if(indexPath.row == 0)
+        {
+			[[XTAppDelegate sharedInstance] switchToTimelineView];
+		}
+        if(indexPath.row == 3)
+        {
+			[[XTAppDelegate sharedInstance] switchToProfileView];
+		}
+	}
+	else if(indexPath.section == 1)
+	{
+		if(indexPath.row == 1)
+        {
+			[[XTAppDelegate sharedInstance] logout];
+		}
+	}
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

@@ -26,10 +26,17 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>xtendr</string>
+			<string>com.tonymillion.xtendr</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>xtendr</string>
+			</array>
+			<key>CFBundleURLTypes</key>
+			<array>
+				<dict>
+					<key>CFBundleURLName</key>
+					<string>xtendr</string>
+				</dict>
 			</array>
 		</dict>
 	</array>

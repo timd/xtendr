@@ -36,6 +36,8 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                                           target:self
                                                                                           action:@selector(cancel:)];
+
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(validityChanged:) name:kXTProfileValidityChangedNotification object:nil];
 }
 
 - (void)viewDidUnload
@@ -58,7 +60,6 @@
 
 	NSMutableURLRequest * req = [[NSMutableURLRequest alloc] initWithURL:authURL];
 
-	
 	[self.webView loadRequest:req];
 }
 
@@ -69,30 +70,20 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-	NSLog(@"shouldStartLoadWithRequest: %@", request.URL);
+	DLog(@"shouldStartLoadWithRequest: %@", request.URL);
 
-	NSArray *components = [[request URL].absoluteString  componentsSeparatedByString:@"#"];
-
-    if([components count]) {
-        NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-        for (NSString *component in components) {
-
-            if([[component componentsSeparatedByString:@"="] count] > 1) {
-				[parameters setObject:[[component componentsSeparatedByString:@"="] objectAtIndex:1] forKey:[[component componentsSeparatedByString:@"="] objectAtIndex:0]];
-            }
-        }
-
-        if([parameters objectForKey:@"access_token"])
-        {
-			[[XTProfileController sharedInstance] loginWithToken:[parameters objectForKey:@"access_token"]];
-
-			[self.parentViewController dismissViewControllerAnimated:YES
-														  completion:^{}];
-
-        }
-    }
+	if([request.URL.absoluteString hasPrefix:@"xtendr"])
+	{
+		[[UIApplication sharedApplication] openURL:request.URL];
+		return NO;
+	}
 
 	return YES;
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+	DLog(@"didFailLoadWithError:%@", error);
 }
 
 -(IBAction)cancel:(id)sender
@@ -101,4 +92,11 @@
                                                   completion:^{}];
 }
 
+-(void)validityChanged:(NSNotification*)note
+{
+	if([XTProfileController sharedInstance].isSessionValid)
+	{
+		[self.parentViewController dismissViewControllerAnimated:YES completion:nil];
+	}
+}
 @end

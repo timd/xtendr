@@ -13,10 +13,20 @@
 	#import <Foundation/Foundation.h>
 	#import <CoreData/CoreData.h>
 
-#import "TestFlight.h"
+	#import "TestFlight.h"
+	#import "XTAppDelegate.h"
 
 extern NSString *kANAPIClientID;
+
+#ifdef DEBUG
+#	define DLog(fmt, ...) NSLog((fmt), ##__VA_ARGS__);
+#else
+#	define DLog(...)
+#endif
 
 #endif
 
 #define TIMELINE_VIEW_TAG		(0)
+#define PROFILE_VIEW_TAG		(1)
+
+

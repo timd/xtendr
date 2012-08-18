@@ -55,6 +55,17 @@
 		5D8E635415DFEE1700DC11FF /* addplus.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D8E635215DFEE1700DC11FF /* addplus.png */; };
 		5D8E635515DFEE1700DC11FF /* addplus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D8E635315DFEE1700DC11FF /* addplus@2x.png */; };
 		5D8E635715DFF03C00DC11FF /* unknown.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D8E635615DFF03C00DC11FF /* unknown.png */; };
+		5D8E635B15DFF61000DC11FF /* XTProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D8E635A15DFF61000DC11FF /* XTProfileViewController.m */; };
+		5D8E635D15DFF91C00DC11FF /* XTProfileHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5D8E635C15DFF91C00DC11FF /* XTProfileHeader.xib */; };
+		5D8E636015DFFB4500DC11FF /* navigationbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D8E635E15DFFB4500DC11FF /* navigationbar.png */; };
+		5D8E636115DFFB4500DC11FF /* navigationbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D8E635F15DFFB4500DC11FF /* navigationbar@2x.png */; };
+		5D8E636315DFFD4300DC11FF /* unicorn.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5D8E636215DFFD4300DC11FF /* unicorn.jpg */; };
+		5D8E636615DFFFD200DC11FF /* headerdimmer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D8E636415DFFFD200DC11FF /* headerdimmer@2x.png */; };
+		5D8E636715DFFFD200DC11FF /* headerdimmer.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D8E636515DFFFD200DC11FF /* headerdimmer.png */; };
+		5D8E636B15E00F1900DC11FF /* TMHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D8E636A15E00F1900DC11FF /* TMHTTPClient.m */; };
+		5D8E636E15E00F3600DC11FF /* TMHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D8E636D15E00F3600DC11FF /* TMHTTPRequest.m */; };
+		5D8E637115E0139D00DC11FF /* TMNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D8E637015E0139D00DC11FF /* TMNetworkActivityIndicatorManager.m */; };
+		5D8E637415E01BB500DC11FF /* XTHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D8E637315E01BB500DC11FF /* XTHTTPClient.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -125,6 +136,22 @@
 		5D8E635215DFEE1700DC11FF /* addplus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = addplus.png; sourceTree = "<group>"; };
 		5D8E635315DFEE1700DC11FF /* addplus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "addplus@2x.png"; sourceTree = "<group>"; };
 		5D8E635615DFF03C00DC11FF /* unknown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unknown.png; sourceTree = "<group>"; };
+		5D8E635915DFF61000DC11FF /* XTProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTProfileViewController.h; sourceTree = "<group>"; };
+		5D8E635A15DFF61000DC11FF /* XTProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTProfileViewController.m; sourceTree = "<group>"; };
+		5D8E635C15DFF91C00DC11FF /* XTProfileHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = XTProfileHeader.xib; sourceTree = "<group>"; };
+		5D8E635E15DFFB4500DC11FF /* navigationbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navigationbar.png; sourceTree = "<group>"; };
+		5D8E635F15DFFB4500DC11FF /* navigationbar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigationbar@2x.png"; sourceTree = "<group>"; };
+		5D8E636215DFFD4300DC11FF /* unicorn.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = unicorn.jpg; sourceTree = "<group>"; };
+		5D8E636415DFFFD200DC11FF /* headerdimmer@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "headerdimmer@2x.png"; sourceTree = "<group>"; };
+		5D8E636515DFFFD200DC11FF /* headerdimmer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = headerdimmer.png; sourceTree = "<group>"; };
+		5D8E636915E00F1900DC11FF /* TMHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMHTTPClient.h; sourceTree = "<group>"; };
+		5D8E636A15E00F1900DC11FF /* TMHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMHTTPClient.m; sourceTree = "<group>"; };
+		5D8E636C15E00F3600DC11FF /* TMHTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMHTTPRequest.h; sourceTree = "<group>"; };
+		5D8E636D15E00F3600DC11FF /* TMHTTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMHTTPRequest.m; sourceTree = "<group>"; };
+		5D8E636F15E0139D00DC11FF /* TMNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMNetworkActivityIndicatorManager.h; sourceTree = "<group>"; };
+		5D8E637015E0139D00DC11FF /* TMNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMNetworkActivityIndicatorManager.m; sourceTree = "<group>"; };
+		5D8E637215E01BB500DC11FF /* XTHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTHTTPClient.h; sourceTree = "<group>"; };
+		5D8E637315E01BB500DC11FF /* XTHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTHTTPClient.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,18 +208,21 @@
 		5D8AFF9715DFBA39004241D5 /* xtendr */ = {
 			isa = PBXGroup;
 			children = (
+				5D8AFFE615DFDB96004241D5 /* graphics */,
+				5D8AFFCB15DFD3AA004241D5 /* leftpanel */,
 				5D01FF7915DFE9F60048F364 /* NSAttributedString+heightforrect.h */,
 				5D01FF7A15DFE9F60048F364 /* NSAttributedString+heightforrect.m */,
-				5D8AFFE615DFDB96004241D5 /* graphics */,
-				5D8AFFE215DFD783004241D5 /* timeline */,
-				5D8AFFCB15DFD3AA004241D5 /* leftpanel */,
 				5D8AFFB315DFBAFA004241D5 /* startup screens */,
+				5D8AFF9815DFBA39004241D5 /* Supporting Files */,
+				5D8AFFE215DFD783004241D5 /* timeline */,
+				5D8E635815DFF58500DC11FF /* userprofile */,
 				5D8AFFA015DFBA39004241D5 /* XTAppDelegate.h */,
 				5D8AFFA115DFBA39004241D5 /* XTAppDelegate.m */,
 				5D8AFFA315DFBA39004241D5 /* xtendr.xcdatamodeld */,
-				5D8AFF9815DFBA39004241D5 /* Supporting Files */,
 				5D8AFFCF15DFD474004241D5 /* XTProfileController.h */,
 				5D8AFFD015DFD474004241D5 /* XTProfileController.m */,
+				5D8E637215E01BB500DC11FF /* XTHTTPClient.h */,
+				5D8E637315E01BB500DC11FF /* XTHTTPClient.m */,
 			);
 			path = xtendr;
 			sourceTree = "<group>";
@@ -211,6 +241,7 @@
 		5D8AFFAB15DFBABE004241D5 /* third party */ = {
 			isa = PBXGroup;
 			children = (
+				5D8E636815E00DA300DC11FF /* TMHTTPClient */,
 				5D01FF8915DFEA5D0048F364 /* TTTAttributedLabel.m */,
 				5D01FF8715DFEA420048F364 /* TTTAttributedLabel.h */,
 				5D8AFFC015DFD21A004241D5 /* TMDiskCache */,
@@ -307,12 +338,40 @@
 		5D8AFFE615DFDB96004241D5 /* graphics */ = {
 			isa = PBXGroup;
 			children = (
+				5D8E635E15DFFB4500DC11FF /* navigationbar.png */,
+				5D8E635F15DFFB4500DC11FF /* navigationbar@2x.png */,
 				5D8AFFE715DFDB96004241D5 /* nav-menu-icon-active.png */,
 				5D8AFFE815DFDB96004241D5 /* nav-menu-icon-active@2x.png */,
 				5D8AFFE915DFDB96004241D5 /* nav-menu-icon.png */,
 				5D8AFFEA15DFDB96004241D5 /* nav-menu-icon@2x.png */,
+				5D8E636415DFFFD200DC11FF /* headerdimmer@2x.png */,
+				5D8E636515DFFFD200DC11FF /* headerdimmer.png */,
 			);
 			path = graphics;
+			sourceTree = "<group>";
+		};
+		5D8E635815DFF58500DC11FF /* userprofile */ = {
+			isa = PBXGroup;
+			children = (
+				5D8E636215DFFD4300DC11FF /* unicorn.jpg */,
+				5D8E635915DFF61000DC11FF /* XTProfileViewController.h */,
+				5D8E635A15DFF61000DC11FF /* XTProfileViewController.m */,
+				5D8E635C15DFF91C00DC11FF /* XTProfileHeader.xib */,
+			);
+			path = userprofile;
+			sourceTree = "<group>";
+		};
+		5D8E636815E00DA300DC11FF /* TMHTTPClient */ = {
+			isa = PBXGroup;
+			children = (
+				5D8E636F15E0139D00DC11FF /* TMNetworkActivityIndicatorManager.h */,
+				5D8E637015E0139D00DC11FF /* TMNetworkActivityIndicatorManager.m */,
+				5D8E636915E00F1900DC11FF /* TMHTTPClient.h */,
+				5D8E636A15E00F1900DC11FF /* TMHTTPClient.m */,
+				5D8E636C15E00F3600DC11FF /* TMHTTPRequest.h */,
+				5D8E636D15E00F3600DC11FF /* TMHTTPRequest.m */,
+			);
+			path = TMHTTPClient;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -390,6 +449,12 @@
 				5D8E635415DFEE1700DC11FF /* addplus.png in Resources */,
 				5D8E635515DFEE1700DC11FF /* addplus@2x.png in Resources */,
 				5D8E635715DFF03C00DC11FF /* unknown.png in Resources */,
+				5D8E635D15DFF91C00DC11FF /* XTProfileHeader.xib in Resources */,
+				5D8E636015DFFB4500DC11FF /* navigationbar.png in Resources */,
+				5D8E636115DFFB4500DC11FF /* navigationbar@2x.png in Resources */,
+				5D8E636315DFFD4300DC11FF /* unicorn.jpg in Resources */,
+				5D8E636615DFFFD200DC11FF /* headerdimmer@2x.png in Resources */,
+				5D8E636715DFFFD200DC11FF /* headerdimmer.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,6 +482,11 @@
 				5D8A000215DFE57B004241D5 /* XTTimelineCell.m in Sources */,
 				5D01FF7B15DFE9F60048F364 /* NSAttributedString+heightforrect.m in Sources */,
 				5D01FF8A15DFEA5D0048F364 /* TTTAttributedLabel.m in Sources */,
+				5D8E635B15DFF61000DC11FF /* XTProfileViewController.m in Sources */,
+				5D8E636B15E00F1900DC11FF /* TMHTTPClient.m in Sources */,
+				5D8E636E15E00F3600DC11FF /* TMHTTPRequest.m in Sources */,
+				5D8E637115E0139D00DC11FF /* TMNetworkActivityIndicatorManager.m in Sources */,
+				5D8E637415E01BB500DC11FF /* XTHTTPClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

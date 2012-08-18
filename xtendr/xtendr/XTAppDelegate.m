@@ -15,6 +15,9 @@
 #import "XTNoCredentialsViewController.h"
 
 #import "XTTimelineViewController.h"
+#import "XTProfileViewController.h"
+
+#import "XTHTTPClient.h"
 
 NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 
@@ -35,12 +38,29 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 @synthesize userProfilePicCache = _userProfilePicCache;
 @synthesize userCoverArtCache	= _userCoverArtCache;
 
++(XTAppDelegate*)sharedInstance
+{
+	return (XTAppDelegate*)[UIApplication sharedApplication].delegate;
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 	[TestFlight takeOff:@"b0e0f25f6e562d4dbed0b8bdad6abdc3_MTIyNjc1MjAxMi0wOC0xOCAwOTozNDo0My4yMTkyNzc"];
 
+
+
+
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
+
+	[[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"navigationbar"]
+									   forBarMetrics:UIBarMetricsDefault];
+
+	[[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:0.129
+															   green:0.549
+																blue:0.898
+															   alpha:1.0000]];
+
 
 
 	self.leftPanelController = [[XTLeftPanelViewController alloc] init];
@@ -63,6 +83,16 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 
     self.window.backgroundColor = [UIColor blackColor];
     [self.window makeKeyAndVisible];
+
+
+	[[NSNotificationCenter defaultCenter] addObserverForName:kXTProfileValidityChangedNotification
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+													  [self configureAppState];
+												  }];
+
+
     return YES;
 }
 
@@ -92,6 +122,30 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 {
 	// Saves changes in the application's managed object context before the application terminates.
 	[self saveContext];
+}
+
+-(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+	DLog(@"openURL: %@", url);
+
+	//This handles login - it *should* work across in-app AND external safari!
+	if([url.host isEqualToString:@"authcomplete"])
+	{
+		NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+		if([[url.fragment componentsSeparatedByString:@"="] count] > 1)
+		{
+			[parameters setObject:[[url.fragment componentsSeparatedByString:@"="] objectAtIndex:1]
+						   forKey:[[url.fragment componentsSeparatedByString:@"="] objectAtIndex:0]];
+		}
+
+		if([parameters objectForKey:@"access_token"])
+        {
+			DLog(@"access_token = %@", [parameters objectForKey:@"access_token"]);
+			[[XTProfileController sharedInstance] loginWithToken:[parameters objectForKey:@"access_token"]];
+        }
+	}
+
+	return YES;
 }
 
 #pragma mark - TMDiskCache things
@@ -146,22 +200,48 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 	XTTimelineViewController * tlvc = [[XTTimelineViewController alloc] init];
 
 	[self switchToViewController:tlvc];
+}
+
+-(void)switchToProfileView
+{
+	XTProfileViewController * pvc = [[XTProfileViewController alloc] init];
+
+	[self switchToViewController:pvc];
 
 }
 
+
 #pragma mark - app startup configuration
+
+-(void)logout
+{
+	[[XTProfileController sharedInstance] logout];
+}
+
 
 -(void)configureAppState
 {
 	if([XTProfileController sharedInstance].isSessionValid)
 	{
+		self.viewDeck.enabled = YES;
+
 		[self switchToTimelineView];
+
+		//set up HTTP header for Auth
+
+		//Adding an Authorization header (preferred) Add the following header to your request: : Bearer [access token] where [access token] is the value of the user's access token.
+
 	}
 	else
 	{
+		[self.viewDeck closeLeftView];
 		self.viewDeck.enabled = NO;
 		XTNoCredentialsViewController * ncvc = [[XTNoCredentialsViewController alloc] init];
 		self.viewDeck.centerController = [[UINavigationController alloc] initWithRootViewController:ncvc];
+
+		[[XTHTTPClient sharedClient] setDefaultHeader:@"Authorization"
+												value:nil];
+
 	}
 }
 
