@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+//TODO: switch to enum pls
+#define kMyTimelineMode			(0)
+#define kGlobalTimelineMode		(1)
+
 @interface XTTimelineViewController : UIViewController
+
+@property(assign, nonatomic) NSInteger		timelineMode;
 
 @end

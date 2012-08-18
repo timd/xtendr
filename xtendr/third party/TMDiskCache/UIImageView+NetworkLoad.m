@@ -37,6 +37,10 @@
                                                            CGImageGetColorSpace(imageRef),
                                                            CGImageGetBitmapInfo(imageRef)
                                                            );
+		if(!bitmapContext)
+		{
+			return image;
+		}
         CGContextDrawImage(bitmapContext, rect, imageRef);
         CGImageRef decompressedImageRef = CGBitmapContextCreateImage(bitmapContext);
         

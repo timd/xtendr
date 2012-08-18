@@ -18,12 +18,22 @@ NSString * username = @"tonymillion";
 
 @interface XTTimelineViewController () <UITableViewDataSource, UITableViewDelegate>
 
+@property(weak)	IBOutlet UIView			*headerView;
+@property(weak) IBOutlet UILabel		*releaseToRefreshLabel;
+
+@property(weak) IBOutlet UIActivityIndicatorView *headerActivityIndicator;
+@property(weak) IBOutlet UILabel		*lastRefreshLabel;
+
+@property(assign) BOOL					inDrag;
+@property(assign) BOOL					refreshOnRelease;
 
 @property(strong) UITableView			*tableView;
 @property(strong) UIButton				*addPostButton;
 @property(strong) UIImageView			*addPostOverlayImageView;
 
 @property(strong) NSArray				*posts;
+
+@property(weak) TMHTTPRequest			*loadRequest;
 
 @end
 
@@ -64,6 +74,14 @@ NSString * username = @"tonymillion";
                                                bundle:[NSBundle mainBundle]]
          forCellReuseIdentifier:@"timelineCell"];
 
+	[[NSBundle mainBundle] loadNibNamed:@"XTTimelineHeader"
+                                  owner:self
+                                options:nil];
+
+	self.releaseToRefreshLabel.alpha = 0;
+
+	self.tableView.tableHeaderView = self.headerView;
+
 
 	self.addPostButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	self.addPostButton.frame = CGRectMake(4,
@@ -76,16 +94,21 @@ NSString * username = @"tonymillion";
 
 	[self.view addSubview:self.addPostButton];
 
-	
-	self.addPostOverlayImageView = [[UIImageView alloc] initWithFrame:CGRectMake(4,
-																				 self.view.bounds.size.height - 52,
-																				 48,
-																				 48)];
-	self.addPostOverlayImageView.image = [UIImage imageNamed:@"addplus"];
+
+
+	self.addPostOverlayImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"addplus"]];
 	self.addPostOverlayImageView.contentMode = UIViewContentModeCenter;
+	self.addPostOverlayImageView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+
 
 	[self.view addSubview:self.addPostOverlayImageView];
 	[self.view bringSubviewToFront:self.addPostOverlayImageView];
+
+	self.addPostOverlayImageView.frame = CGRectMake(4,
+													self.view.bounds.size.height - 54,
+													48,
+													48);
+
 }
 
 - (void)viewDidUnload
@@ -98,20 +121,7 @@ NSString * username = @"tonymillion";
 {
 	[super viewWillAppear:animated];
 
-	[[XTHTTPClient sharedClient] getPath:@"posts/stream"
-							  parameters:nil
-								 success:^(TMHTTPRequest *operation, id responseObject) {
-									 //DLog(@"login S: %@", responseObject);
-									 if(responseObject && [responseObject isKindOfClass:[NSArray class]])
-									 {
-										 self.posts = responseObject;
-										 [self.tableView reloadData];
-									 }
-								 }
-								 failure:^(TMHTTPRequest *operation, NSError *error) {
-									 DLog(@"login F: %@", operation.responseString);
-								 }];
-
+	[self loadPosts];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -136,25 +146,48 @@ NSString * username = @"tonymillion";
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	NSDictionary * post = [self.posts objectAtIndex:indexPath.row];
+
+	/*
+	 */
+
 	NSDictionary * user = [post objectForKey:@"user"];
 
-	DLog(@"post = %@", post);
+	NSString * text = [post objectForKey:@"text"];
+	if ([post objectForKey:@"is_deleted"]) {
+		if([[post objectForKey:@"is_deleted"] boolValue])
+		{
+			text = @"DELETED";
+		}
+	}
 
-	return [XTTimelineCell cellHeightForText:[post objectForKey:@"text"]
+
+	return [XTTimelineCell cellHeightForText:text
 								withUsername:[user objectForKey:@"username"]];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	XTTimelineCell *cell = [tableView dequeueReusableCellWithIdentifier:@"timelineCell"];
-
-	// Configure the cell...
-	//cell.timelineEntry = entry;
 	NSDictionary * post = [self.posts objectAtIndex:indexPath.row];
 	NSDictionary * user = [post objectForKey:@"user"];
 	NSString * avatarURL = [[user objectForKey:@"avatar_image"] objectForKey:@"url"];
 
-	[cell setPostText:[post objectForKey:@"text"]
+	XTTimelineCell *cell = [tableView dequeueReusableCellWithIdentifier:@"timelineCell"];
+
+
+	NSString * text = [post objectForKey:@"text"];
+
+	if ([post objectForKey:@"is_deleted"]) {
+		if([[post objectForKey:@"is_deleted"] boolValue])
+		{
+			text = @"DELETED";
+		}
+	}
+
+
+	// Configure the cell...
+	//cell.timelineEntry = entry;
+
+	[cell setPostText:text
 			 username:[user objectForKey:@"username"]
 		   pictureURL:avatarURL];
 
@@ -165,6 +198,146 @@ NSString * username = @"tonymillion";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+}
+
+#pragma mark - network stuff
+
+-(void)loadPosts
+{
+	if(self.loadRequest)
+	{
+		DLog(@"load already in progress!");
+		return;
+	}
+	
+	DLog(@"loadPosts");
+
+	NSMutableDictionary * params = [NSMutableDictionary dictionaryWithCapacity:2];
+	if(self.posts && self.posts.count)
+	{
+		NSDictionary * firstPost = [self.posts objectAtIndex:0];
+
+		[params setObject:[firstPost objectForKey:@"id"]
+				   forKey:@"since_id"];
+	}
+
+	NSString * path;
+	if(self.timelineMode == kMyTimelineMode)
+	{
+		path = @"posts/stream";
+	}
+	else if(self.timelineMode == kGlobalTimelineMode)
+	{
+		path = @"posts/stream/global";
+	}
+
+	[self.headerActivityIndicator startAnimating];
+	self.lastRefreshLabel.text = NSLocalizedString(@"Refresh In Progress", @"");
+
+	self.loadRequest = [[XTHTTPClient sharedClient] getPath:path
+							  parameters:nil
+								 success:^(TMHTTPRequest *operation, id responseObject) {
+									 self.loadRequest = nil;
+									 [self.headerActivityIndicator stopAnimating];
+									 //DLog(@"login S: %@", responseObject);
+									 if(responseObject && [responseObject isKindOfClass:[NSArray class]])
+									 {
+										 if(self.posts)
+										 {
+											 NSArray * temp = responseObject;
+
+											 self.posts = [temp arrayByAddingObjectsFromArray:self.posts];
+										 }
+										 else
+										 {
+											 self.posts = responseObject;
+										 }
+										 [self.tableView reloadData];
+
+										 self.lastRefreshLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Last Refresh: %@", @""), [NSDateFormatter localizedStringFromDate:[NSDate date] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle]];
+
+									 }
+								 }
+								 failure:^(TMHTTPRequest *operation, NSError *error) {
+									 self.loadRequest = nil;
+									 [self.headerActivityIndicator stopAnimating];
+
+									 DLog(@"login F: %@", operation.responseString);
+								 }];
+}
+
+-(void)setTimelineMode:(NSInteger)timelineMode
+{
+	_timelineMode = timelineMode;
+
+	if(_timelineMode == kMyTimelineMode)
+	{
+		self.title = NSLocalizedString(@"My Stream", @"");
+	}
+	else
+	{
+		self.title = NSLocalizedString(@"Global Stream", @"");
+	}
+}
+
+#pragma mark - View Scrolling header thing
+
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+	self.inDrag = YES;
+}
+
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+	self.inDrag = NO;
+	[UIView animateWithDuration:0.4
+					 animations:^{
+						 self.releaseToRefreshLabel.alpha = 0;
+
+					 }];
+
+	if(self.refreshOnRelease)
+	{
+		[self loadPosts];
+	}
+
+	self.refreshOnRelease = NO;
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+	if(scrollView.contentOffset.y < 0)
+	{
+		CGFloat extra = abs(scrollView.contentOffset.y);
+
+		CGRect rect = self.headerView.frame;
+		rect.origin.y = MIN(0, scrollView.contentOffset.y);
+		rect.size.height = 100 + extra;
+		self.headerView.frame = rect;
+
+		if(self.inDrag)
+		{
+			if(rect.size.height > 160)
+			{
+				[UIView animateWithDuration:0.4
+								 animations:^{
+									 self.releaseToRefreshLabel.alpha = 1;
+									 
+								 }];
+				self.refreshOnRelease = YES;
+			}
+			else
+			{
+				[UIView animateWithDuration:0.4
+								 animations:^{
+									 self.releaseToRefreshLabel.alpha = 0;
+
+								 }];
+				self.refreshOnRelease = NO;
+
+			}
+		}
+	}
 }
 
 

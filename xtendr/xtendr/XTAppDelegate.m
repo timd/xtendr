@@ -27,6 +27,9 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 @property(strong) IIViewDeckController			*viewDeck;
 @property(strong) XTLeftPanelViewController		*leftPanelController;
 
+@property(strong) XTTimelineViewController		*myTimelineController;
+@property(strong) XTTimelineViewController		*globalTimelineController;
+
 @end
 
 @implementation XTAppDelegate
@@ -195,11 +198,25 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
     vc.navigationItem.leftBarButtonItem = self.leftActivator;
 }
 
--(void)switchToTimelineView
+-(void)switchToMyTimelineView
 {
-	XTTimelineViewController * tlvc = [[XTTimelineViewController alloc] init];
+	if(!self.myTimelineController)
+	{
+		self.myTimelineController = [[XTTimelineViewController alloc] init];
+		self.myTimelineController.timelineMode = kMyTimelineMode;
 
-	[self switchToViewController:tlvc];
+	}
+	[self switchToViewController:self.myTimelineController];
+}
+
+-(void)switchToGlobalTimelineView
+{
+	if(!self.globalTimelineController)
+	{
+		self.globalTimelineController = [[XTTimelineViewController alloc] init];
+		self.globalTimelineController.timelineMode = kGlobalTimelineMode;
+	}
+	[self switchToViewController:self.globalTimelineController];
 }
 
 -(void)switchToProfileView
@@ -225,7 +242,7 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 	{
 		self.viewDeck.enabled = YES;
 
-		[self switchToTimelineView];
+		[self switchToMyTimelineView];
 
 		//set up HTTP header for Auth
 

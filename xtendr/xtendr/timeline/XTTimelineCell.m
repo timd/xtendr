@@ -24,6 +24,8 @@
 @property(weak) IBOutlet UIImageView			*thoughtBubbleBackImageView;
 @property(weak) IBOutlet TTTAttributedLabel		*thoughtLabel;
 
+@property(assign) CGFloat						labelHeight;
+
 @end
 
 @implementation XTTimelineCell
@@ -102,18 +104,17 @@
 {
     [super layoutSubviews];
 
-    CGRect oldFrame = self.thoughtBubbleBackImageView.frame;
-    oldFrame.size.height = self.frame.size.height - 8;
-    self.thoughtBubbleBackImageView.frame = oldFrame;
+	self.thoughtBubbleBackImageView.frame = CGRectMake(45, 5, 263, self.labelHeight+15);
+	self.thoughtLabel.frame = CGRectMake(60, 10, 240, self.labelHeight);
 
-    oldFrame = self.thoughtLabel.frame;
-    oldFrame.size.height = self.frame.size.height - 20;
-    self.thoughtLabel.frame = oldFrame;
 }
 
 -(void)setPostText:(NSString*)postText username:(NSString*)username pictureURL:(NSString*)picURL
 {
-	self.thoughtLabel.text = [XTTimelineCell attributedStringForPost:postText andUsername:username];
+	NSAttributedString* attrText = [XTTimelineCell attributedStringForPost:postText andUsername:username];
+	self.thoughtLabel.text = attrText;
+
+	self.labelHeight = [attrText heightForWidth:240];
 
 	[self.userPhoto loadFromURL:[NSURL URLWithString:picURL]
 			   placeholderImage:[UIImage imageNamed:@"unknown"]
@@ -123,7 +124,7 @@
 
 -(IBAction)userPhotoTapped:(id)sender
 {
-	
+	DLog(@"USER PHOTO TAPPED!");
 }
 
 @end

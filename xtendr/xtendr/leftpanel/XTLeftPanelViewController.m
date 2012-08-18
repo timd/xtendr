@@ -198,8 +198,13 @@
     {
         if(indexPath.row == 0)
         {
-			[[XTAppDelegate sharedInstance] switchToTimelineView];
+			[[XTAppDelegate sharedInstance] switchToMyTimelineView];
 		}
+		if(indexPath.row == 1)
+        {
+			[[XTAppDelegate sharedInstance] switchToGlobalTimelineView];
+		}
+
         if(indexPath.row == 3)
         {
 			[[XTAppDelegate sharedInstance] switchToProfileView];

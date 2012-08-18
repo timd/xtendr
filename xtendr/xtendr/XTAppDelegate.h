@@ -28,7 +28,9 @@
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 
--(void)switchToTimelineView;
+-(void)switchToMyTimelineView;
+-(void)switchToGlobalTimelineView;
+
 -(void)switchToProfileView;
 
 @end

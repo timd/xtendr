@@ -66,6 +66,7 @@
 		5D8E636E15E00F3600DC11FF /* TMHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D8E636D15E00F3600DC11FF /* TMHTTPRequest.m */; };
 		5D8E637115E0139D00DC11FF /* TMNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D8E637015E0139D00DC11FF /* TMNetworkActivityIndicatorManager.m */; };
 		5D8E637415E01BB500DC11FF /* XTHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D8E637315E01BB500DC11FF /* XTHTTPClient.m */; };
+		5DC60FC215E03C7600DC96C5 /* XTTimelineHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DC60FC115E03C7600DC96C5 /* XTTimelineHeader.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -152,6 +153,7 @@
 		5D8E637015E0139D00DC11FF /* TMNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMNetworkActivityIndicatorManager.m; sourceTree = "<group>"; };
 		5D8E637215E01BB500DC11FF /* XTHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTHTTPClient.h; sourceTree = "<group>"; };
 		5D8E637315E01BB500DC11FF /* XTHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTHTTPClient.m; sourceTree = "<group>"; };
+		5DC60FC115E03C7600DC96C5 /* XTTimelineHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = XTTimelineHeader.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -331,6 +333,7 @@
 				5D8AFFEF15DFE045004241D5 /* XTTimelineCell.xib */,
 				5D8AFFF115DFE119004241D5 /* XTTimelineViewController.h */,
 				5D8AFFF215DFE119004241D5 /* XTTimelineViewController.m */,
+				5DC60FC115E03C7600DC96C5 /* XTTimelineHeader.xib */,
 			);
 			path = timeline;
 			sourceTree = "<group>";
@@ -455,6 +458,7 @@
 				5D8E636315DFFD4300DC11FF /* unicorn.jpg in Resources */,
 				5D8E636615DFFFD200DC11FF /* headerdimmer@2x.png in Resources */,
 				5D8E636715DFFFD200DC11FF /* headerdimmer.png in Resources */,
+				5DC60FC215E03C7600DC96C5 /* XTTimelineHeader.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
