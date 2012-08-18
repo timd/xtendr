@@ -254,7 +254,7 @@ NSString * username = @"tonymillion";
 										 }
 										 [self.tableView reloadData];
 
-										 self.lastRefreshLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Last Refresh: %@", @""), [NSDateFormatter localizedStringFromDate:[NSDate date] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle]];
+										 self.lastRefreshLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Last Refresh: %@", @""), [NSDateFormatter localizedStringFromDate:[NSDate date] dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle]];
 
 									 }
 								 }
