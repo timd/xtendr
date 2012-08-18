@@ -8,17 +8,60 @@
 
 #import "XTAppDelegate.h"
 
+#import "XTProfileController.h"
+
+#import "IIViewDeckController.h"
+#import "XTLeftPanelViewController.h"
+#import "XTNoCredentialsViewController.h"
+
+#import "XTTimelineViewController.h"
+
+NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
+
+@interface XTAppDelegate () <IIViewDeckControllerDelegate>
+
+@property(strong) UIBarButtonItem               *leftActivator;
+@property(strong) IIViewDeckController			*viewDeck;
+@property(strong) XTLeftPanelViewController		*leftPanelController;
+
+@end
+
 @implementation XTAppDelegate
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+@synthesize userProfilePicCache = _userProfilePicCache;
+@synthesize userCoverArtCache	= _userCoverArtCache;
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+	[TestFlight takeOff:@"b0e0f25f6e562d4dbed0b8bdad6abdc3_MTIyNjc1MjAxMi0wOC0xOCAwOTozNDo0My4yMTkyNzc"];
+
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    self.window.backgroundColor = [UIColor whiteColor];
+
+
+	self.leftPanelController = [[XTLeftPanelViewController alloc] init];
+
+	// Override point for customization after application launch.
+    self.viewDeck = [[IIViewDeckController alloc] init];
+    self.viewDeck.centerhiddenInteractivity = IIViewDeckCenterHiddenNotUserInteractiveWithTapToClose;
+    self.viewDeck.leftController            = self.leftPanelController;
+	self.viewDeck.delegate					= self;
+
+	self.window.rootViewController			= self.viewDeck;
+
+	self.leftActivator = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav-menu-icon.png"]
+                                                          style:UIBarButtonItemStylePlain
+                                                         target:self.viewDeck
+                                                         action:@selector(toggleLeftView)];
+
+
+    [self configureAppState];
+
+    self.window.backgroundColor = [UIColor blackColor];
     [self.window makeKeyAndVisible];
     return YES;
 }
@@ -51,6 +94,79 @@
 	[self saveContext];
 }
 
+#pragma mark - TMDiskCache things
+
+-(TMDiskCache*)userProfilePicCache
+{
+	if(!_userProfilePicCache)
+	{
+		_userProfilePicCache = [[TMDiskCache alloc] initWithDirectoryName:@"userprofilepics"
+															 andCacheSize:5];
+	}
+
+	return _userProfilePicCache;
+}
+
+-(TMDiskCache*)userCoverArtCache
+{
+	if(!_userCoverArtCache)
+	{
+		_userCoverArtCache = [[TMDiskCache alloc] initWithDirectoryName:@"usercoverart"
+														   andCacheSize:20];
+	}
+
+	return _userCoverArtCache;
+}
+
+
+#pragma mark - view switching stuff
+
+-(void)switchToViewController:(UIViewController*)vc
+{
+    if([self.viewDeck leftControllerIsOpen])
+    {
+        [self.viewDeck closeLeftViewBouncing:^(IIViewDeckController *controller) {
+            self.viewDeck.centerController = [[UINavigationController alloc] initWithRootViewController:vc];
+        }];
+    }
+    else
+    {
+		[self.viewDeck setCenterController:[[UINavigationController alloc] initWithRootViewController:vc]];
+    }
+
+	[[NSUserDefaults standardUserDefaults] setInteger:vc.tabBarItem.tag
+											   forKey:@"visibleviewcontroller"];
+	[[NSUserDefaults standardUserDefaults] synchronize];
+
+    vc.navigationItem.leftBarButtonItem = self.leftActivator;
+}
+
+-(void)switchToTimelineView
+{
+	XTTimelineViewController * tlvc = [[XTTimelineViewController alloc] init];
+
+	[self switchToViewController:tlvc];
+
+}
+
+#pragma mark - app startup configuration
+
+-(void)configureAppState
+{
+	if([XTProfileController sharedInstance].isSessionValid)
+	{
+		[self switchToTimelineView];
+	}
+	else
+	{
+		self.viewDeck.enabled = NO;
+		XTNoCredentialsViewController * ncvc = [[XTNoCredentialsViewController alloc] init];
+		self.viewDeck.centerController = [[UINavigationController alloc] initWithRootViewController:ncvc];
+	}
+}
+
+#pragma mark - Core Data stack
+
 - (void)saveContext
 {
     NSError *error = nil;
@@ -65,7 +181,7 @@
     }
 }
 
-#pragma mark - Core Data stack
+
 
 // Returns the managed object context for the application.
 // If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.

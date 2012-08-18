@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "TMDiskCache.h"
+
 @interface XTAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
@@ -15,6 +17,9 @@
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
+@property(readonly) TMDiskCache *userProfilePicCache;
+@property(readonly) TMDiskCache *userCoverArtCache;
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
