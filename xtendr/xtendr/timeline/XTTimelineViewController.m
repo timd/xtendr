@@ -12,6 +12,8 @@
 
 #import "XTHTTPClient.h"
 
+#import "XTNewPostViewController.h"
+
 NSString * lorem = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ut aliquam risus. Aliquam erat volutpat. Ut nibh leo, vulputate nec sollicitudin vitae, fringilla at odio. Phasellus lacinia auctor nullam.";
 
 NSString * username = @"tonymillion";
@@ -91,6 +93,10 @@ NSString * username = @"tonymillion";
 	self.addPostButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
 
 	[self.addPostButton setImage:[UIImage imageNamed:@"addpostbutton"] forState:UIControlStateNormal];
+
+	[self.addPostButton addTarget:self
+						   action:@selector(addPost:)
+				 forControlEvents:UIControlEventTouchUpInside];
 
 	[self.view addSubview:self.addPostButton];
 
@@ -230,6 +236,10 @@ NSString * username = @"tonymillion";
 	{
 		path = @"posts/stream/global";
 	}
+	else if(self.timelineMode == kMentionsTimelineMode)
+	{
+		path = @"users/me/mentions";
+	}
 
 	[self.headerActivityIndicator startAnimating];
 	self.lastRefreshLabel.text = NSLocalizedString(@"Refresh In Progress", @"");
@@ -274,9 +284,13 @@ NSString * username = @"tonymillion";
 	{
 		self.title = NSLocalizedString(@"My Stream", @"");
 	}
-	else
+	else if(_timelineMode == kGlobalTimelineMode)
 	{
 		self.title = NSLocalizedString(@"Global Stream", @"");
+	}
+	else if(_timelineMode == kMentionsTimelineMode)
+	{
+		self.title = NSLocalizedString(@"Mentions", @"");
 	}
 }
 
@@ -340,5 +354,15 @@ NSString * username = @"tonymillion";
 	}
 }
 
+-(IBAction)addPost:(id)sender
+{
+	DLog(@"AddPost");
+
+	XTNewPostViewController*npvc = [[XTNewPostViewController alloc] init];
+
+	[self presentViewController:[[UINavigationController alloc] initWithRootViewController:npvc]
+					   animated:YES
+					 completion:nil];
+}
 
 @end

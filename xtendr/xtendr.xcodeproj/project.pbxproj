@@ -67,6 +67,9 @@
 		5D8E637115E0139D00DC11FF /* TMNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D8E637015E0139D00DC11FF /* TMNetworkActivityIndicatorManager.m */; };
 		5D8E637415E01BB500DC11FF /* XTHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D8E637315E01BB500DC11FF /* XTHTTPClient.m */; };
 		5DC60FC215E03C7600DC96C5 /* XTTimelineHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DC60FC115E03C7600DC96C5 /* XTTimelineHeader.xib */; };
+		5DC60FC715E0579600DC96C5 /* XTNewPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DC60FC615E0579600DC96C5 /* XTNewPostViewController.m */; };
+		5DC60FC915E0584900DC96C5 /* XTNewPostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DC60FC815E0584900DC96C5 /* XTNewPostCell.xib */; };
+		5DC60FCC15E0585B00DC96C5 /* XTNewPostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DC60FCB15E0585B00DC96C5 /* XTNewPostCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -154,6 +157,11 @@
 		5D8E637215E01BB500DC11FF /* XTHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTHTTPClient.h; sourceTree = "<group>"; };
 		5D8E637315E01BB500DC11FF /* XTHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTHTTPClient.m; sourceTree = "<group>"; };
 		5DC60FC115E03C7600DC96C5 /* XTTimelineHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = XTTimelineHeader.xib; sourceTree = "<group>"; };
+		5DC60FC515E0579600DC96C5 /* XTNewPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTNewPostViewController.h; sourceTree = "<group>"; };
+		5DC60FC615E0579600DC96C5 /* XTNewPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTNewPostViewController.m; sourceTree = "<group>"; };
+		5DC60FC815E0584900DC96C5 /* XTNewPostCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = XTNewPostCell.xib; sourceTree = "<group>"; };
+		5DC60FCA15E0585B00DC96C5 /* XTNewPostCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTNewPostCell.h; sourceTree = "<group>"; };
+		5DC60FCB15E0585B00DC96C5 /* XTNewPostCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTNewPostCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -210,6 +218,7 @@
 		5D8AFF9715DFBA39004241D5 /* xtendr */ = {
 			isa = PBXGroup;
 			children = (
+				5DC60FC415E0575900DC96C5 /* newpost */,
 				5D8AFFE615DFDB96004241D5 /* graphics */,
 				5D8AFFCB15DFD3AA004241D5 /* leftpanel */,
 				5D01FF7915DFE9F60048F364 /* NSAttributedString+heightforrect.h */,
@@ -377,6 +386,18 @@
 			path = TMHTTPClient;
 			sourceTree = "<group>";
 		};
+		5DC60FC415E0575900DC96C5 /* newpost */ = {
+			isa = PBXGroup;
+			children = (
+				5DC60FC515E0579600DC96C5 /* XTNewPostViewController.h */,
+				5DC60FC615E0579600DC96C5 /* XTNewPostViewController.m */,
+				5DC60FC815E0584900DC96C5 /* XTNewPostCell.xib */,
+				5DC60FCA15E0585B00DC96C5 /* XTNewPostCell.h */,
+				5DC60FCB15E0585B00DC96C5 /* XTNewPostCell.m */,
+			);
+			path = newpost;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -459,6 +480,7 @@
 				5D8E636615DFFFD200DC11FF /* headerdimmer@2x.png in Resources */,
 				5D8E636715DFFFD200DC11FF /* headerdimmer.png in Resources */,
 				5DC60FC215E03C7600DC96C5 /* XTTimelineHeader.xib in Resources */,
+				5DC60FC915E0584900DC96C5 /* XTNewPostCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -491,6 +513,8 @@
 				5D8E636E15E00F3600DC11FF /* TMHTTPRequest.m in Sources */,
 				5D8E637115E0139D00DC11FF /* TMNetworkActivityIndicatorManager.m in Sources */,
 				5D8E637415E01BB500DC11FF /* XTHTTPClient.m in Sources */,
+				5DC60FC715E0579600DC96C5 /* XTNewPostViewController.m in Sources */,
+				5DC60FCC15E0585B00DC96C5 /* XTNewPostCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

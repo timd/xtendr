@@ -11,6 +11,7 @@
 //TODO: switch to enum pls
 #define kMyTimelineMode			(0)
 #define kGlobalTimelineMode		(1)
+#define kMentionsTimelineMode	(2)
 
 @interface XTTimelineViewController : UIViewController
 

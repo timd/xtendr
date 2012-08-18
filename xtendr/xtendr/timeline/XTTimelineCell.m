@@ -32,7 +32,7 @@
 
 +(NSAttributedString*)boldString:(NSString*)string
 {
-    CTFontRef font      = CTFontCreateWithName(CFSTR("HelveticaNeue-Medium"), 15.0, NULL);
+    CTFontRef font      = CTFontCreateWithName(CFSTR("HelveticaNeue-Medium"), 17.0, NULL);
 
     NSMutableAttributedString * returnString = [[NSMutableAttributedString alloc] initWithString:string];
     [returnString addAttribute:(id)kCTFontAttributeName
@@ -46,7 +46,7 @@
 
 +(NSAttributedString*)normalString:(NSString*)string
 {
-    CTFontRef font      = CTFontCreateWithName(CFSTR("HelveticaNeue"), 14.0, NULL);
+    CTFontRef font      = CTFontCreateWithName(CFSTR("HelveticaNeue"), 16.0, NULL);
 
     NSMutableAttributedString * returnString = [[NSMutableAttributedString alloc] initWithString:string];
     [returnString addAttribute:(id)kCTFontAttributeName

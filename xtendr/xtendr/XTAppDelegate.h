@@ -30,6 +30,7 @@
 
 -(void)switchToMyTimelineView;
 -(void)switchToGlobalTimelineView;
+-(void)switchToMentionsTimelineView;
 
 -(void)switchToProfileView;
 

@@ -29,6 +29,7 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 
 @property(strong) XTTimelineViewController		*myTimelineController;
 @property(strong) XTTimelineViewController		*globalTimelineController;
+@property(strong) XTTimelineViewController		*mentionsTimelineController;
 
 @end
 
@@ -218,6 +219,18 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 	}
 	[self switchToViewController:self.globalTimelineController];
 }
+
+-(void)switchToMentionsTimelineView
+{
+	if(!self.mentionsTimelineController)
+	{
+		self.mentionsTimelineController = [[XTTimelineViewController alloc] init];
+		self.mentionsTimelineController.timelineMode = kMentionsTimelineMode;
+	}
+	[self switchToViewController:self.mentionsTimelineController];
+}
+
+
 
 -(void)switchToProfileView
 {

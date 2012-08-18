@@ -134,7 +134,7 @@
         }
 		else if(indexPath.row == 2)
         {
-            cell.textLabel.text = NSLocalizedString(@"Followers", @"");
+            cell.textLabel.text = NSLocalizedString(@"Mentions", @"");
 			cell.badge.hidden = YES;
 
         }
@@ -146,7 +146,7 @@
         }
 		else if(indexPath.row == 4)
 		{
-            cell.textLabel.text = NSLocalizedString(@"More Stuff", @"");
+            cell.textLabel.text = NSLocalizedString(@"Search", @"");
 			cell.badge.hidden = YES;
 		}
     }
@@ -204,10 +204,16 @@
         {
 			[[XTAppDelegate sharedInstance] switchToGlobalTimelineView];
 		}
-
+		if(indexPath.row == 2)
+        {
+			[[XTAppDelegate sharedInstance] switchToMentionsTimelineView];
+		}
         if(indexPath.row == 3)
         {
 			[[XTAppDelegate sharedInstance] switchToProfileView];
+		}
+        if(indexPath.row == 4)
+        {
 		}
 	}
 	else if(indexPath.section == 1)

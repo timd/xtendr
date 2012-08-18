@@ -201,7 +201,7 @@ static NSString * TMJSONStringFromParameters(NSDictionary *parameters)
     self.baseURL = url;
 
     self.stringEncoding     = NSUTF8StringEncoding;
-    self.parameterEncoding  = TMJSONParameterEncoding;
+    self.parameterEncoding  = TMFormURLParameterEncoding;
 	self.defaultHeaders     = [NSMutableDictionary dictionary];
 
 	// Accept-Encoding HTTP Header; see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.3
