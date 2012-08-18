@@ -13,6 +13,10 @@
 
 #import "NSAttributedString+heightforrect.h"
 
+#import "UIImageView+NetworkLoad.h"
+
+#import "XTAppDelegate.h"
+
 
 @interface XTTimelineCell ()
 
@@ -92,8 +96,6 @@
 	image = [image resizableImageWithCapInsets:UIEdgeInsetsMake(23, 20, 20, 8)];
 
     self.thoughtBubbleBackImageView.image = image;
-
-	self.userPhoto.image = [UIImage imageNamed:@"unknown"];
 }
 
 -(void)layoutSubviews
@@ -109,9 +111,13 @@
     self.thoughtLabel.frame = oldFrame;
 }
 
--(void)setPostText:(NSString*)postText username:(NSString*)username
+-(void)setPostText:(NSString*)postText username:(NSString*)username pictureURL:(NSString*)picURL
 {
 	self.thoughtLabel.text = [XTTimelineCell attributedStringForPost:postText andUsername:username];
+
+	[self.userPhoto loadFromURL:[NSURL URLWithString:picURL]
+			   placeholderImage:[UIImage imageNamed:@"unknown"]
+					  fromCache:[XTAppDelegate sharedInstance].userProfilePicCache];
 }
 
 

@@ -18,6 +18,6 @@ typedef void (^faceTapBlock)(XTTimelineCell  *cell);
 
 +(CGFloat)cellHeightForText:(NSString*)text withUsername:(NSString*)username;
 
--(void)setPostText:(NSString*)postText username:(NSString*)username;
+-(void)setPostText:(NSString*)postText username:(NSString*)username pictureURL:(NSString*)picURL;
 
 @end

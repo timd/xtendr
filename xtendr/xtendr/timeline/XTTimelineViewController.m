@@ -152,10 +152,11 @@ NSString * username = @"tonymillion";
 	//cell.timelineEntry = entry;
 	NSDictionary * post = [self.posts objectAtIndex:indexPath.row];
 	NSDictionary * user = [post objectForKey:@"user"];
-	//DLog(@"post = %@", post);
+	NSString * avatarURL = [[user objectForKey:@"avatar_image"] objectForKey:@"url"];
 
 	[cell setPostText:[post objectForKey:@"text"]
-			 username:[user objectForKey:@"username"]];
+			 username:[user objectForKey:@"username"]
+		   pictureURL:avatarURL];
 
 	return cell;
 }
