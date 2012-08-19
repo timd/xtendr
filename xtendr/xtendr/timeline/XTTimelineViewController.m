@@ -267,6 +267,22 @@ NSString * username = @"tonymillion";
 										 {
 											 if(temp.count)
 											 {
+												 // so what we need to do, is detect if the new posts we just got
+												 // ARE NOT continuous with the old set of posts
+												 // we do not want to end up in a situation where we have
+												 // posts 100-80 then 70-40 then 25-0 - that is a disconinuous list!
+
+												 NSString * tempLast = [[temp lastObject] objectForKey:@"id"];
+												 // temp value would be 80 in this case
+												 // first value would be 70
+												 
+												 if(self.firstID.integerValue < (tempLast.integerValue-1))
+												 {
+													 // discontinuation detected.
+													 // TODO: deal with this.
+													 self.lastID = tempLast;
+												 }
+
 												 self.posts = [temp arrayByAddingObjectsFromArray:self.posts];
 												 self.firstID = [[temp objectAtIndex:0] objectForKey:@"id"];
 											 }

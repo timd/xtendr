@@ -132,6 +132,10 @@
         self.navigationItem.rightBarButtonItem.enabled = NO;
     }
 
+	int charsleft = 256 - textView.text.length;
+
+	self.theCell.charsLeftLabel.text = [NSString stringWithFormat:@"%d", charsleft];
+
     CGFloat newTextHeight = [textView contentSize].height;
 
     if(newTextHeight != self.textHeight)

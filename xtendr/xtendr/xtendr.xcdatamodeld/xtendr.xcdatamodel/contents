@@ -1,9 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1487" systemVersion="12A269" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Post" syncable="YES">
+        <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="html" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="is_deleted" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="reply_to" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="posts" inverseEntity="User" syncable="YES"/>
+    </entity>
+    <entity name="User" syncable="YES">
+        <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="desc_html" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="desc_text" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="followed_by" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="follows" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="follows_you" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="locale" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="postcount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="you_follow" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="you_muted" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <relationship name="posts" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Post" inverseName="user" inverseEntity="Post" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Post" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Post" positionX="0" positionY="0" width="128" height="150"/>
+        <element name="User" positionX="160" positionY="192" width="128" height="255"/>
     </elements>
 </model>

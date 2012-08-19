@@ -51,9 +51,6 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 {
 	[TestFlight takeOff:@"b0e0f25f6e562d4dbed0b8bdad6abdc3_MTIyNjc1MjAxMi0wOC0xOCAwOTozNDo0My4yMTkyNzc"];
 
-
-
-
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
 
@@ -246,6 +243,10 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 -(void)logout
 {
 	[[XTProfileController sharedInstance] logout];
+
+	self.myTimelineController		= nil;
+	self.globalTimelineController	= nil;
+	self.mentionsTimelineController = nil;
 }
 
 

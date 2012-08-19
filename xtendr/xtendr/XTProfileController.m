@@ -67,29 +67,34 @@ NSString *const kXTProfileValidityChangedNotification   = @"kXTProfileValidityCh
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
 	return [defaults objectForKey:@"access_token"];
-
 }
 
 -(void)loginWithToken:(NSString*)token
 {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults setObject:token forKey:@"access_token"];
-	[defaults synchronize];
-
 	//TODO: call
 	//https://alpha-api.app.net/stream/0/token?access_token=<token>
 	// get user object and send out a kXTProfileValidityChangedNotification
 	[[XTHTTPClient sharedClient] setDefaultHeader:@"Authorization"
 											value:[NSString stringWithFormat:@"Bearer %@", token]];
 
+	//TODO: this is kinda wrong, we shouldn't save the token until we've validated it
+	// or all kinds of things will go wrong!
 	[[XTHTTPClient sharedClient] getPath:@"token"
 							  parameters:nil
 								 success:^(TMHTTPRequest *operation, id responseObject) {
 									 DLog(@"login S: %@", responseObject);
+
+									 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+									 [defaults setObject:token forKey:@"access_token"];
+									 [defaults synchronize];
+
 									 [[NSNotificationCenter defaultCenter] postNotificationName:kXTProfileValidityChangedNotification object:nil];
 								 }
 								 failure:^(TMHTTPRequest *operation, NSError *error) {
 									 DLog(@"login F: %@", operation.responseString);
+									 
+									 [self logout];
+									 
 									 [[NSNotificationCenter defaultCenter] postNotificationName:kXTProfileValidityChangedNotification object:nil];
 								 }];
 }

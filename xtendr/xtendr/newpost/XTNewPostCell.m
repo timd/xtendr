@@ -14,6 +14,7 @@
 @property(weak) IBOutlet UIImageView	*textBackgroundImageView;
 
 
+
 @end
 
 @implementation XTNewPostCell

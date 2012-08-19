@@ -11,5 +11,7 @@
 @interface XTNewPostCell : UITableViewCell
 
 @property(weak) IBOutlet UITextView		*textView;
+@property(weak) IBOutlet UILabel		*charsLeftLabel;
+
 
 @end
