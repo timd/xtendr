@@ -11,18 +11,18 @@
 #import "XTTimelineCell.h"
 
 #import "XTHTTPClient.h"
+#import "XTProfileController.h"
 
 #import "XTNewPostViewController.h"
+#import "XTProfileViewController.h"
 
-NSString * lorem = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ut aliquam risus. Aliquam erat volutpat. Ut nibh leo, vulputate nec sollicitudin vitae, fringilla at odio. Phasellus lacinia auctor nullam.";
-
-NSString * username = @"tonymillion";
+#import "UIImageView+NetworkLoad.h"
 
 @interface XTTimelineViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property(weak)	IBOutlet UIView			*headerView;
 @property(weak) IBOutlet UILabel		*releaseToRefreshLabel;
-
+@property(weak) IBOutlet UIImageView	*headerBackgroundView;
 @property(weak) IBOutlet UIActivityIndicatorView *headerActivityIndicator;
 @property(weak) IBOutlet UILabel		*lastRefreshLabel;
 
@@ -39,7 +39,6 @@ NSString * username = @"tonymillion";
 
 @property(strong)	NSString			*firstID;
 @property(strong)	NSString			*lastID;
-
 
 @end
 
@@ -119,6 +118,7 @@ NSString * username = @"tonymillion";
 													48,
 													48);
 
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(profileRefreshed:) name:kXTProfileRefreshedNotification object:nil];
 }
 
 - (void)viewDidUnload
@@ -132,6 +132,11 @@ NSString * username = @"tonymillion";
 	[super viewWillAppear:animated];
 
 	[self loadPosts];
+
+	[self.headerBackgroundView loadFromURL:[XTProfileController sharedInstance].profileUser.cover_image.url
+						  placeholderImage:nil
+								 fromCache:[XTAppDelegate sharedInstance].userCoverArtCache];
+
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -197,9 +202,21 @@ NSString * username = @"tonymillion";
 	// Configure the cell...
 	//cell.timelineEntry = entry;
 
+	cell.post = post;
+
 	[cell setPostText:text
 			 username:[user objectForKey:@"username"]
 		   pictureURL:avatarURL];
+
+	cell.faceTapBlock = ^(XTTimelineCell  *cell)
+	{
+		NSDictionary * user = [cell.post objectForKey:@"user"];
+		if(user)
+		{
+			XTProfileViewController * pvc = [[XTProfileViewController alloc] initWithUserID:[user objectForKey:@"id"]];
+			[self.navigationController pushViewController:pvc animated:YES];
+		}
+	};
 
 	return cell;
 }
@@ -430,7 +447,7 @@ NSString * username = @"tonymillion";
 
 		if(self.inDrag)
 		{
-			if(rect.size.height > 160)
+			if(rect.size.height > 200)
 			{
 				[UIView animateWithDuration:0.4
 								 animations:^{
@@ -462,6 +479,13 @@ NSString * username = @"tonymillion";
 	[self presentViewController:[[UINavigationController alloc] initWithRootViewController:npvc]
 					   animated:YES
 					 completion:nil];
+}
+
+-(void)profileRefreshed:(NSNotification*)note
+{
+	[self.headerBackgroundView loadFromURL:[XTProfileController sharedInstance].profileUser.cover_image.url
+						  placeholderImage:nil
+								 fromCache:[XTAppDelegate sharedInstance].userCoverArtCache];
 }
 
 @end

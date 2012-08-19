@@ -15,6 +15,16 @@
 
 	#import "TestFlight.h"
 	#import "XTAppDelegate.h"
+	#import "XTHTTPClient.h"
+
+#import "User.h"
+#import "User+coolstuff.h"
+
+#import "Post.h"
+#import "Post+coolstuff.h"
+
+#import "UIImageView+NetworkLoad.h"
+
 
 extern NSString *kANAPIClientID;
 

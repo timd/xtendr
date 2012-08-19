@@ -18,7 +18,7 @@
 #import "XTAppDelegate.h"
 
 
-@interface XTTimelineCell ()
+@interface XTTimelineCell () <TTTAttributedLabelDelegate>
 
 @property(weak) IBOutlet UIImageView			*userPhoto;
 @property(weak) IBOutlet UIImageView			*thoughtBubbleBackImageView;
@@ -79,6 +79,9 @@
 {
 	[super awakeFromNib];
 
+	self.thoughtLabel.dataDetectorTypes = UIDataDetectorTypeLink;
+    self.thoughtLabel.delegate = self;
+
 	CALayer * l = self.userPhoto.layer;
 
     l.masksToBounds = YES;
@@ -125,6 +128,19 @@
 -(IBAction)userPhotoTapped:(id)sender
 {
 	DLog(@"USER PHOTO TAPPED!");
+	if(self.faceTapBlock)
+	{
+		self.faceTapBlock(self);
+	}
+}
+
+-(void)attributedLabel:(TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url
+{
+    DLog(@"URL TAPPED: %@", url);
+
+	//TODO: googlechrome://www.google.com
+
+    [[UIApplication sharedApplication] openURL:url];
 }
 
 @end

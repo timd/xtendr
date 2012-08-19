@@ -9,7 +9,12 @@
 #import "XTProfileController.h"
 #import "XTHTTPClient.h"
 
+#import "XTUserController.h"
+
+//TODO: dedupe this code if possible
+
 NSString *const kXTProfileValidityChangedNotification   = @"kXTProfileValidityChangedNotification";
+NSString *const kXTProfileRefreshedNotification			= @"kXTProfileRefreshedNotification";
 
 
 @implementation XTProfileController
@@ -33,13 +38,18 @@ NSString *const kXTProfileValidityChangedNotification   = @"kXTProfileValidityCh
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
 		NSString * token = [defaults objectForKey:@"access_token"];
-
 		if(token)
 		{
 			[[XTHTTPClient sharedClient] setDefaultHeader:@"Authorization"
 													value:[NSString stringWithFormat:@"Bearer %@", token]];
 		}
 
+		NSDictionary * userDict = [defaults objectForKey:@"user"];
+		if(userDict)
+		{
+			[[XTUserController sharedInstance] addUser:userDict];
+			_profileUser = [[XTProfileUser alloc] initWithAttributes:userDict];
+		}
 
 		[self refreshProfile];
 	}
@@ -88,7 +98,25 @@ NSString *const kXTProfileValidityChangedNotification   = @"kXTProfileValidityCh
 									 [defaults setObject:token forKey:@"access_token"];
 									 [defaults synchronize];
 
-									 [[NSNotificationCenter defaultCenter] postNotificationName:kXTProfileValidityChangedNotification object:nil];
+									 if(responseObject && [responseObject isKindOfClass:[NSDictionary class]])
+									 {
+										 NSDictionary * userDict = [responseObject objectForKey:@"user"];
+
+										 _profileUser = [[XTProfileUser alloc] initWithAttributes:userDict];
+
+										 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+										 [defaults setObject:userDict forKey:@"user"];
+										 [defaults synchronize];
+
+										 //TODO: push the user dict into core data
+										 [[XTUserController sharedInstance] addUser:userDict];
+
+										 [[NSNotificationCenter defaultCenter] postNotificationName:kXTProfileRefreshedNotification
+																							 object:nil];
+									 }
+
+									 [[NSNotificationCenter defaultCenter] postNotificationName:kXTProfileValidityChangedNotification
+																						 object:nil];
 								 }
 								 failure:^(TMHTTPRequest *operation, NSError *error) {
 									 DLog(@"login F: %@", operation.responseString);
@@ -119,7 +147,24 @@ NSString *const kXTProfileValidityChangedNotification   = @"kXTProfileValidityCh
 								 success:^(TMHTTPRequest *operation, id responseObject) {
 									 DLog(@"refreshProfile S: %@", responseObject);
 									 // we dont send this here cos it screws the UI, innit
-									 //[[NSNotificationCenter defaultCenter] postNotificationName:kXTProfileValidityChangedNotification object:nil];
+
+
+									 if(responseObject && [responseObject isKindOfClass:[NSDictionary class]])
+									 {
+										 NSDictionary * userDict = [responseObject objectForKey:@"user"];
+
+										 _profileUser = [[XTProfileUser alloc] initWithAttributes:userDict];
+
+										 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+										 [defaults setObject:userDict forKey:@"user"];
+										 [defaults synchronize];
+
+										 //TODO: push the user dict into core data
+										 [[XTUserController sharedInstance] addUser:userDict];
+
+										 [[NSNotificationCenter defaultCenter] postNotificationName:kXTProfileRefreshedNotification
+																							 object:nil];
+									 }
 								 }
 								 failure:^(TMHTTPRequest *operation, NSError *error) {
 									 // if this fails cos the token is bad we need to deal with that!

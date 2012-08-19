@@ -10,4 +10,6 @@
 
 @interface XTProfileViewController : UITableViewController
 
+-(id)initWithUserID:(NSString*)userid;
+
 @end

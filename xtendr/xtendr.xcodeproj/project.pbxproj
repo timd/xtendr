@@ -70,10 +70,21 @@
 		5DC2586015E0DD9A007F6EEE /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DC2585F15E0DD9A007F6EEE /* Icon.png */; };
 		5DC2586215E0DDC1007F6EEE /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DC2586115E0DDC1007F6EEE /* Default@2x.png */; };
 		5DC2586415E0DDDD007F6EEE /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DC2586315E0DDDD007F6EEE /* Default.png */; };
+		5DC2586815E0EC78007F6EEE /* XTProfileUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DC2586715E0EC78007F6EEE /* XTProfileUser.m */; };
+		5DC2586B15E0EDB3007F6EEE /* XTImageObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DC2586A15E0EDB3007F6EEE /* XTImageObject.m */; };
+		5DC2586E15E0F8F7007F6EEE /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DC2586D15E0F8F7007F6EEE /* User.m */; };
+		5DC2587115E0F912007F6EEE /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DC2587015E0F912007F6EEE /* Post.m */; };
+		5DC2587415E1141D007F6EEE /* XTPostController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DC2587315E1141D007F6EEE /* XTPostController.m */; };
+		5DC2587715E11429007F6EEE /* XTUserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DC2587615E11429007F6EEE /* XTUserController.m */; };
+		5DC2587A15E11531007F6EEE /* whitedot.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DC2587815E11531007F6EEE /* whitedot.png */; };
+		5DC2587B15E11531007F6EEE /* whitedot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DC2587915E11531007F6EEE /* whitedot@2x.png */; };
+		5DC2587E15E11942007F6EEE /* Post+coolstuff.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DC2587D15E11942007F6EEE /* Post+coolstuff.m */; };
+		5DC2588115E1197F007F6EEE /* User+coolstuff.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DC2588015E1197F007F6EEE /* User+coolstuff.m */; };
 		5DC60FC215E03C7600DC96C5 /* XTTimelineHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DC60FC115E03C7600DC96C5 /* XTTimelineHeader.xib */; };
 		5DC60FC715E0579600DC96C5 /* XTNewPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DC60FC615E0579600DC96C5 /* XTNewPostViewController.m */; };
 		5DC60FC915E0584900DC96C5 /* XTNewPostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DC60FC815E0584900DC96C5 /* XTNewPostCell.xib */; };
 		5DC60FCC15E0585B00DC96C5 /* XTNewPostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DC60FCB15E0585B00DC96C5 /* XTNewPostCell.m */; };
+		5DF0AEFD15E14F250093C081 /* XTSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DF0AEFC15E14F250093C081 /* XTSettingsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -164,12 +175,32 @@
 		5DC2585F15E0DD9A007F6EEE /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		5DC2586115E0DDC1007F6EEE /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		5DC2586315E0DDDD007F6EEE /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		5DC2586615E0EC78007F6EEE /* XTProfileUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTProfileUser.h; sourceTree = "<group>"; };
+		5DC2586715E0EC78007F6EEE /* XTProfileUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTProfileUser.m; sourceTree = "<group>"; };
+		5DC2586915E0EDB3007F6EEE /* XTImageObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTImageObject.h; sourceTree = "<group>"; };
+		5DC2586A15E0EDB3007F6EEE /* XTImageObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTImageObject.m; sourceTree = "<group>"; };
+		5DC2586C15E0F8F6007F6EEE /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		5DC2586D15E0F8F7007F6EEE /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		5DC2586F15E0F912007F6EEE /* Post.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Post.h; sourceTree = "<group>"; };
+		5DC2587015E0F912007F6EEE /* Post.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Post.m; sourceTree = "<group>"; };
+		5DC2587215E1141D007F6EEE /* XTPostController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTPostController.h; sourceTree = "<group>"; };
+		5DC2587315E1141D007F6EEE /* XTPostController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTPostController.m; sourceTree = "<group>"; };
+		5DC2587515E11429007F6EEE /* XTUserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTUserController.h; sourceTree = "<group>"; };
+		5DC2587615E11429007F6EEE /* XTUserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTUserController.m; sourceTree = "<group>"; };
+		5DC2587815E11531007F6EEE /* whitedot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whitedot.png; sourceTree = "<group>"; };
+		5DC2587915E11531007F6EEE /* whitedot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whitedot@2x.png"; sourceTree = "<group>"; };
+		5DC2587C15E11942007F6EEE /* Post+coolstuff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Post+coolstuff.h"; sourceTree = "<group>"; };
+		5DC2587D15E11942007F6EEE /* Post+coolstuff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Post+coolstuff.m"; sourceTree = "<group>"; };
+		5DC2587F15E1197E007F6EEE /* User+coolstuff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "User+coolstuff.h"; sourceTree = "<group>"; };
+		5DC2588015E1197F007F6EEE /* User+coolstuff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "User+coolstuff.m"; sourceTree = "<group>"; };
 		5DC60FC115E03C7600DC96C5 /* XTTimelineHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = XTTimelineHeader.xib; sourceTree = "<group>"; };
 		5DC60FC515E0579600DC96C5 /* XTNewPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTNewPostViewController.h; sourceTree = "<group>"; };
 		5DC60FC615E0579600DC96C5 /* XTNewPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTNewPostViewController.m; sourceTree = "<group>"; };
 		5DC60FC815E0584900DC96C5 /* XTNewPostCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = XTNewPostCell.xib; sourceTree = "<group>"; };
 		5DC60FCA15E0585B00DC96C5 /* XTNewPostCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTNewPostCell.h; sourceTree = "<group>"; };
 		5DC60FCB15E0585B00DC96C5 /* XTNewPostCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTNewPostCell.m; sourceTree = "<group>"; };
+		5DF0AEFB15E14F250093C081 /* XTSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTSettingsViewController.h; sourceTree = "<group>"; };
+		5DF0AEFC15E14F250093C081 /* XTSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTSettingsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -198,7 +229,6 @@
 				5DC2586115E0DDC1007F6EEE /* Default@2x.png */,
 				5DC2585F15E0DD9A007F6EEE /* Icon.png */,
 				5DC2585D15E0DD94007F6EEE /* Icon@2x.png */,
-				5D8E634C15DFEB9100DC11FF /* CoreText.framework */,
 				5D8AFFAB15DFBABE004241D5 /* third party */,
 				5D8AFF9715DFBA39004241D5 /* xtendr */,
 				5D8AFF8E15DFBA39004241D5 /* Frameworks */,
@@ -217,6 +247,7 @@
 		5D8AFF8E15DFBA39004241D5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5D8E634C15DFEB9100DC11FF /* CoreText.framework */,
 				5D8AFFC915DFD2D9004241D5 /* libz.dylib */,
 				5D8AFFC715DFD2C3004241D5 /* QuartzCore.framework */,
 				5D8AFF8F15DFBA39004241D5 /* UIKit.framework */,
@@ -230,6 +261,8 @@
 		5D8AFF9715DFBA39004241D5 /* xtendr */ = {
 			isa = PBXGroup;
 			children = (
+				5DF0AEF915E14F130093C081 /* settings */,
+				5DC2586515E0EC66007F6EEE /* models */,
 				5DC60FC415E0575900DC96C5 /* newpost */,
 				5D8AFFE615DFDB96004241D5 /* graphics */,
 				5D8AFFCB15DFD3AA004241D5 /* leftpanel */,
@@ -246,6 +279,10 @@
 				5D8AFFD015DFD474004241D5 /* XTProfileController.m */,
 				5D8E637215E01BB500DC11FF /* XTHTTPClient.h */,
 				5D8E637315E01BB500DC11FF /* XTHTTPClient.m */,
+				5DC2587215E1141D007F6EEE /* XTPostController.h */,
+				5DC2587315E1141D007F6EEE /* XTPostController.m */,
+				5DC2587515E11429007F6EEE /* XTUserController.h */,
+				5DC2587615E11429007F6EEE /* XTUserController.m */,
 			);
 			path = xtendr;
 			sourceTree = "<group>";
@@ -338,6 +375,8 @@
 		5D8AFFE215DFD783004241D5 /* timeline */ = {
 			isa = PBXGroup;
 			children = (
+				5DC2587815E11531007F6EEE /* whitedot.png */,
+				5DC2587915E11531007F6EEE /* whitedot@2x.png */,
 				5D8E635615DFF03C00DC11FF /* unknown.png */,
 				5D8E635215DFEE1700DC11FF /* addplus.png */,
 				5D8E635315DFEE1700DC11FF /* addplus@2x.png */,
@@ -398,6 +437,25 @@
 			path = TMHTTPClient;
 			sourceTree = "<group>";
 		};
+		5DC2586515E0EC66007F6EEE /* models */ = {
+			isa = PBXGroup;
+			children = (
+				5DC2587C15E11942007F6EEE /* Post+coolstuff.h */,
+				5DC2587D15E11942007F6EEE /* Post+coolstuff.m */,
+				5DC2586F15E0F912007F6EEE /* Post.h */,
+				5DC2587015E0F912007F6EEE /* Post.m */,
+				5DC2587F15E1197E007F6EEE /* User+coolstuff.h */,
+				5DC2588015E1197F007F6EEE /* User+coolstuff.m */,
+				5DC2586C15E0F8F6007F6EEE /* User.h */,
+				5DC2586D15E0F8F7007F6EEE /* User.m */,
+				5DC2586915E0EDB3007F6EEE /* XTImageObject.h */,
+				5DC2586A15E0EDB3007F6EEE /* XTImageObject.m */,
+				5DC2586615E0EC78007F6EEE /* XTProfileUser.h */,
+				5DC2586715E0EC78007F6EEE /* XTProfileUser.m */,
+			);
+			path = models;
+			sourceTree = "<group>";
+		};
 		5DC60FC415E0575900DC96C5 /* newpost */ = {
 			isa = PBXGroup;
 			children = (
@@ -408,6 +466,15 @@
 				5DC60FCB15E0585B00DC96C5 /* XTNewPostCell.m */,
 			);
 			path = newpost;
+			sourceTree = "<group>";
+		};
+		5DF0AEF915E14F130093C081 /* settings */ = {
+			isa = PBXGroup;
+			children = (
+				5DF0AEFB15E14F250093C081 /* XTSettingsViewController.h */,
+				5DF0AEFC15E14F250093C081 /* XTSettingsViewController.m */,
+			);
+			path = settings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -497,6 +564,8 @@
 				5DC2586015E0DD9A007F6EEE /* Icon.png in Resources */,
 				5DC2586215E0DDC1007F6EEE /* Default@2x.png in Resources */,
 				5DC2586415E0DDDD007F6EEE /* Default.png in Resources */,
+				5DC2587A15E11531007F6EEE /* whitedot.png in Resources */,
+				5DC2587B15E11531007F6EEE /* whitedot@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -531,6 +600,15 @@
 				5D8E637415E01BB500DC11FF /* XTHTTPClient.m in Sources */,
 				5DC60FC715E0579600DC96C5 /* XTNewPostViewController.m in Sources */,
 				5DC60FCC15E0585B00DC96C5 /* XTNewPostCell.m in Sources */,
+				5DC2586815E0EC78007F6EEE /* XTProfileUser.m in Sources */,
+				5DC2586B15E0EDB3007F6EEE /* XTImageObject.m in Sources */,
+				5DC2586E15E0F8F7007F6EEE /* User.m in Sources */,
+				5DC2587115E0F912007F6EEE /* Post.m in Sources */,
+				5DC2587415E1141D007F6EEE /* XTPostController.m in Sources */,
+				5DC2587715E11429007F6EEE /* XTUserController.m in Sources */,
+				5DC2587E15E11942007F6EEE /* Post+coolstuff.m in Sources */,
+				5DC2588115E1197F007F6EEE /* User+coolstuff.m in Sources */,
+				5DF0AEFD15E14F250093C081 /* XTSettingsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

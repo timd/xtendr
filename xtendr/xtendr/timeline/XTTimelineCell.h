@@ -14,7 +14,8 @@ typedef void (^faceTapBlock)(XTTimelineCell  *cell);
 
 @interface XTTimelineCell : UITableViewCell
 
-@property(nonatomic, copy) faceTapBlock    faceTapBlock;
+@property(nonatomic, copy) faceTapBlock		faceTapBlock;
+@property(nonatomic, strong) NSDictionary		*post;
 
 +(CGFloat)cellHeightForText:(NSString*)text withUsername:(NSString*)username;
 

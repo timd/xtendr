@@ -6,7 +6,11 @@
 //  Copyright (c) 2012 Tony Million. All rights reserved.
 //
 
+#import <QuartzCore/QuartzCore.h>
+
 #import "XTNewPostCell.h"
+#import "XTProfileController.h"
+
 
 @interface XTNewPostCell ()
 
@@ -33,10 +37,22 @@
 	[super awakeFromNib];
 
 	UIImage * image = [UIImage imageNamed:@"post-thoughtbubble"];
-
 	image = [image resizableImageWithCapInsets:UIEdgeInsetsMake(23, 20, 20, 8)];
-
     self.textBackgroundImageView.image = image;
+
+
+	CALayer * l = self.userPictureImageView.layer;
+
+    l.masksToBounds = YES;
+    l.cornerRadius  = 7;
+    l.borderWidth   = 1;
+    l.borderColor   = [UIColor darkGrayColor].CGColor;
+
+
+	[self.userPictureImageView loadFromURL:[XTProfileController sharedInstance].profileUser.avatar_image.url
+						  placeholderImage:[UIImage imageNamed:@"unknown"]
+								 fromCache:[XTAppDelegate sharedInstance].userProfilePicCache];
+
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

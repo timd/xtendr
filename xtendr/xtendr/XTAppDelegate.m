@@ -19,6 +19,8 @@
 
 #import "XTHTTPClient.h"
 
+#import "XTSettingsViewController.h"
+
 NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 
 @interface XTAppDelegate () <IIViewDeckControllerDelegate>
@@ -50,6 +52,14 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 	[TestFlight takeOff:@"b0e0f25f6e562d4dbed0b8bdad6abdc3_MTIyNjc1MjAxMi0wOC0xOCAwOTozNDo0My4yMTkyNzc"];
+
+	// primes the profile!
+	[XTProfileController sharedInstance];
+
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(syncDidSave:)
+												 name:NSManagedObjectContextDidSaveNotification
+											   object:nil];
 
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
@@ -231,10 +241,15 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 
 -(void)switchToProfileView
 {
-	XTProfileViewController * pvc = [[XTProfileViewController alloc] init];
+	XTProfileViewController * pvc = [[XTProfileViewController alloc] initWithUserID:[XTProfileController sharedInstance].profileUser.id];
 
 	[self switchToViewController:pvc];
+}
 
+-(void)switchToSettingsView
+{
+	XTSettingsViewController *svc = [[XTSettingsViewController alloc] init];
+	[self switchToViewController:svc];
 }
 
 
@@ -322,6 +337,33 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
     return _managedObjectModel;
 }
 
+-(void)resetPersistentStore
+{
+	NSError *error = nil;
+
+	_managedObjectModel		= nil;
+	_managedObjectContext	= nil;
+
+	for (NSPersistentStore *store in [_persistentStoreCoordinator persistentStores])
+	{
+		if (![_persistentStoreCoordinator removePersistentStore:store
+														  error:&error])
+		{
+			DLog(@"Unresolved error %@, %@", error, [error userInfo]);
+		}
+
+		if (![[NSFileManager defaultManager] removeItemAtURL:store.URL
+													   error:&error])
+		{
+			DLog(@" %@, %@", error, [error userInfo]);
+		}
+	}
+
+	// Delete the reference to non-existing store
+	_persistentStoreCoordinator = nil;
+}
+
+
 // Returns the persistent store coordinator for the application.
 // If the coordinator doesn't already exist, it is created and the application's store added to it.
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator
@@ -333,36 +375,45 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"xtendr.sqlite"];
     
     NSError *error = nil;
-    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
-        /*
-         Replace this implementation with code to handle the error appropriately.
-         
-         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
-         
-         Typical reasons for an error here include:
-         * The persistent store is not accessible;
-         * The schema for the persistent store is incompatible with current managed object model.
-         Check the error message to determine what the actual problem was.
-         
-         
-         If the persistent store is not accessible, there is typically something wrong with the file path. Often, a file URL is pointing into the application's resources directory instead of a writeable directory.
-         
-         If you encounter schema incompatibility errors during development, you can reduce their frequency by:
-         * Simply deleting the existing store:
-         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil]
-         
-         * Performing automatic lightweight migration by passing the following dictionary as the options parameter:
-         @{NSMigratePersistentStoresAutomaticallyOption:@YES, NSInferMappingModelAutomaticallyOption:@YES}
-         
-         Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
-         
-         */
+
+again:
+
+	_persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
+                                                   configuration:nil
+                                                             URL:storeURL
+                                                         options:@{	NSInferMappingModelAutomaticallyOption : [NSNumber numberWithBool:YES],
+																	NSMigratePersistentStoresAutomaticallyOption : [NSNumber numberWithBool:YES]}
+														   error:&error])
+    {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        abort();
-    }    
-    
+
+		DLog(@"DELETING STORE AND RETRYING");
+		NSError * error;
+
+		if(![[NSFileManager defaultManager] removeItemAtURL:storeURL
+													  error:&error])
+		{
+			DLog(@"ERROR DELETING STORE: %@", error);
+		}
+
+		goto again;
+    }
+
     return _persistentStoreCoordinator;
+}
+
+- (void)syncDidSave:(NSNotification *)saveNotification
+{
+	if ([NSThread isMainThread]) {
+		DLog(@"Syncing Save WE ARE main thread");
+		[self.managedObjectContext mergeChangesFromContextDidSaveNotification:saveNotification];
+	} else {
+		DLog(@"Syncing Save on main thread");
+		[self performSelectorOnMainThread:@selector(syncDidSave:)
+							   withObject:saveNotification
+							waitUntilDone:NO];
+	}
 }
 
 #pragma mark - Application's Documents directory
@@ -371,6 +422,16 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 - (NSURL *)applicationDocumentsDirectory
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
+- (NSURL *)applicationLibraryDirectory
+{
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
+- (NSURL *)applicationCacheDirectory
+{
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
 @end

@@ -11,7 +11,9 @@
 
 #import "XTAppDelegate.h"
 
-@interface XTLeftPanelViewController ()
+@interface XTLeftPanelViewController () <UIActionSheetDelegate>
+
+@property(strong) UIActionSheet * logoutSheet;
 
 @end
 
@@ -156,15 +158,6 @@
         {
             cell.badge.hidden	= YES;
 			cell.chevron.hidden = NO;
-			/*
-			 if([ZZProfileController sharedInstance].user.username.length < 20)
-			 {
-			 cell.textLabel.text = [ZZProfileController sharedInstance].user.username;
-			 }
-			 else
-			 {
-			 }
-			 */
 			cell.textLabel.text = NSLocalizedString(@"Settings", @"");
         }
 		
@@ -172,15 +165,6 @@
         {
             cell.badge.hidden	= YES;
 			cell.chevron.hidden = YES;
-			/*
-			 if([ZZProfileController sharedInstance].user.username.length < 20)
-			 {
-			 cell.textLabel.text = [ZZProfileController sharedInstance].user.username;
-			 }
-			 else
-			 {
-			 }
-			 */
 			cell.textLabel.text = NSLocalizedString(@"Logout", @"");
         }
 
@@ -218,12 +202,46 @@
 	}
 	else if(indexPath.section == 1)
 	{
+		if(indexPath.row == 0)
+        {
+			[[XTAppDelegate sharedInstance] switchToSettingsView];
+		}
+
 		if(indexPath.row == 1)
         {
-			[[XTAppDelegate sharedInstance] logout];
+			[self logoutPressed:self];
 		}
 	}
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
+
+#pragma mark - action sheet
+
+-(IBAction)logoutPressed:(id)sender
+{
+    self.logoutSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Are you sure you want to log out?", @"")
+                                                   delegate:self
+                                          cancelButtonTitle:NSLocalizedString(@"Cancel", @"")
+                                     destructiveButtonTitle:NSLocalizedString(@"Logout", @"")
+                                          otherButtonTitles:nil];
+
+    self.logoutSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+    [self.logoutSheet showInView:self.view];
+}
+
+// Called when a button is clicked. The view will be automatically dismissed after this call returns
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    DLog(@"Picked sheet button: %d", buttonIndex);
+
+    if (buttonIndex == actionSheet.destructiveButtonIndex)
+    {
+        [[XTAppDelegate sharedInstance] logout];
+
+    }
+
+    self.logoutSheet = nil;
+}
+
 
 @end

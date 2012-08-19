@@ -9,9 +9,14 @@
 #import <Foundation/Foundation.h>
 
 extern NSString *const kXTProfileValidityChangedNotification;
+extern NSString *const kXTProfileRefreshedNotification;
+
+#import "XTProfileUser.h"
 
 
 @interface XTProfileController : NSObject
+
+@property(readonly) XTProfileUser	*profileUser;
 
 +(XTProfileController*)sharedInstance;
 

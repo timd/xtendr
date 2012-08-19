@@ -34,4 +34,6 @@
 
 -(void)switchToProfileView;
 
+-(void)switchToSettingsView;
+
 @end
