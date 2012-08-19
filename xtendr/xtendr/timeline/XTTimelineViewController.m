@@ -37,6 +37,10 @@ NSString * username = @"tonymillion";
 
 @property(weak) TMHTTPRequest			*loadRequest;
 
+@property(strong)	NSString			*firstID;
+@property(strong)	NSString			*lastID;
+
+
 @end
 
 @implementation XTTimelineViewController
@@ -202,6 +206,14 @@ NSString * username = @"tonymillion";
 
 #pragma mark - Table view delegate
 
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	if(indexPath.row > self.posts.count - 10)
+	{
+		[self loadMorePosts];
+	}
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 }
@@ -219,11 +231,9 @@ NSString * username = @"tonymillion";
 	DLog(@"loadPosts");
 
 	NSMutableDictionary * params = [NSMutableDictionary dictionaryWithCapacity:2];
-	if(self.posts && self.posts.count)
+	if(self.firstID)
 	{
-		NSDictionary * firstPost = [self.posts objectAtIndex:0];
-
-		[params setObject:[firstPost objectForKey:@"id"]
+		[params setObject:self.firstID
 				   forKey:@"since_id"];
 	}
 
@@ -245,22 +255,26 @@ NSString * username = @"tonymillion";
 	self.lastRefreshLabel.text = NSLocalizedString(@"Refresh In Progress", @"");
 
 	self.loadRequest = [[XTHTTPClient sharedClient] getPath:path
-							  parameters:nil
+							  parameters:params
 								 success:^(TMHTTPRequest *operation, id responseObject) {
 									 self.loadRequest = nil;
 									 [self.headerActivityIndicator stopAnimating];
 									 //DLog(@"login S: %@", responseObject);
 									 if(responseObject && [responseObject isKindOfClass:[NSArray class]])
 									 {
+										 NSArray * temp = responseObject;
 										 if(self.posts)
 										 {
-											 NSArray * temp = responseObject;
-
-											 self.posts = [temp arrayByAddingObjectsFromArray:self.posts];
+											 if(temp.count)
+											 {
+												 self.posts = [temp arrayByAddingObjectsFromArray:self.posts];
+												 self.firstID = [[temp objectAtIndex:0] objectForKey:@"id"];
+											 }
 										 }
 										 else
 										 {
-											 self.posts = responseObject;
+											 self.posts = temp;
+											 self.lastID = [[temp lastObject] objectForKey:@"id"];
 										 }
 										 [self.tableView reloadData];
 
@@ -274,6 +288,75 @@ NSString * username = @"tonymillion";
 
 									 DLog(@"login F: %@", operation.responseString);
 								 }];
+}
+
+-(void)loadMorePosts
+{
+	if(self.loadRequest)
+	{
+		DLog(@"load already in progress!");
+		return;
+	}
+
+	DLog(@"loadMorePosts");
+
+	if(!self.lastID)
+	{
+		DLog(@"LastID not valid");
+		
+		return;
+	}
+
+	NSMutableDictionary * params = [NSMutableDictionary dictionaryWithCapacity:2];
+	if(self.lastID)
+	{
+		DLog(@"lastID = %@", self.lastID);
+		[params setObject:self.lastID
+				   forKey:@"before_id"];
+	}
+
+	NSString * path;
+	if(self.timelineMode == kMyTimelineMode)
+	{
+		path = @"posts/stream";
+	}
+	else if(self.timelineMode == kGlobalTimelineMode)
+	{
+		path = @"posts/stream/global";
+	}
+	else if(self.timelineMode == kMentionsTimelineMode)
+	{
+		path = @"users/me/mentions";
+	}
+
+	[self.headerActivityIndicator startAnimating];
+	self.lastRefreshLabel.text = NSLocalizedString(@"Refresh In Progress", @"");
+
+	self.loadRequest = [[XTHTTPClient sharedClient] getPath:path
+												 parameters:params
+													success:^(TMHTTPRequest *operation, id responseObject) {
+														self.loadRequest = nil;
+														[self.headerActivityIndicator stopAnimating];
+														//DLog(@"login S: %@", responseObject);
+														if(responseObject && [responseObject isKindOfClass:[NSArray class]])
+														{
+															NSArray * temp = responseObject;
+															if(self.posts)
+															{
+																self.posts = [self.posts arrayByAddingObjectsFromArray:temp];
+																self.lastID = [[temp lastObject] objectForKey:@"id"];
+															}
+															
+															[self.tableView reloadData];
+														}
+													}
+													failure:^(TMHTTPRequest *operation, NSError *error) {
+														self.loadRequest = nil;
+														[self.headerActivityIndicator stopAnimating];
+														
+														DLog(@"login F: %@", operation.responseString);
+													}];
+
 }
 
 -(void)setTimelineMode:(NSInteger)timelineMode
