@@ -106,7 +106,7 @@
 	self.thoughtBubbleBackImageView.frame = CGRectMake(45, 5, 263, self.labelHeight+15);
 	self.thoughtLabel.frame = CGRectMake(60, 10, 240, self.labelHeight);
 
-	self.quickReplyButton.frame = CGRectMake(286, self.labelHeight-5, 20, 20);
+	self.quickReplyButton.frame = CGRectMake(286-20, self.labelHeight-25, 40, 40);
 
 }
 

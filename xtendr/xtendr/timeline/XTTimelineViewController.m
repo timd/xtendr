@@ -162,7 +162,7 @@
 
     [fetchRequest setPredicate:predicate];
 
-	[fetchRequest setFetchLimit:100000];
+	[fetchRequest setFetchLimit:100];
 
     // Create and initialize the fetchedResultsController.
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
