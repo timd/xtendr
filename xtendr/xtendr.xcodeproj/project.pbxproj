@@ -88,6 +88,9 @@
 		5DF0AF0C15E285BA0093C081 /* quickreply.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DF0AF0A15E285B90093C081 /* quickreply.png */; };
 		5DF0AF0D15E285BA0093C081 /* quickreply@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DF0AF0B15E285BA0093C081 /* quickreply@2x.png */; };
 		5DF0AF1315E288300093C081 /* XTMention.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DF0AF1215E288300093C081 /* XTMention.m */; };
+		5DF0AF3715E2A95A0093C081 /* XTFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DF0AF3615E2A95A0093C081 /* XTFeedbackViewController.m */; };
+		5DF0AF3A15E2ACB50093C081 /* brownlinen.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DF0AF3815E2ACB50093C081 /* brownlinen.png */; };
+		5DF0AF3B15E2ACB50093C081 /* brownlinen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DF0AF3915E2ACB50093C081 /* brownlinen@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -208,6 +211,10 @@
 		5DF0AF0B15E285BA0093C081 /* quickreply@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "quickreply@2x.png"; sourceTree = "<group>"; };
 		5DF0AF1115E288300093C081 /* XTMention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTMention.h; sourceTree = "<group>"; };
 		5DF0AF1215E288300093C081 /* XTMention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTMention.m; sourceTree = "<group>"; };
+		5DF0AF3515E2A95A0093C081 /* XTFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTFeedbackViewController.h; sourceTree = "<group>"; };
+		5DF0AF3615E2A95A0093C081 /* XTFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTFeedbackViewController.m; sourceTree = "<group>"; };
+		5DF0AF3815E2ACB50093C081 /* brownlinen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = brownlinen.png; sourceTree = "<group>"; };
+		5DF0AF3915E2ACB50093C081 /* brownlinen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "brownlinen@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -268,6 +275,7 @@
 		5D8AFF9715DFBA39004241D5 /* xtendr */ = {
 			isa = PBXGroup;
 			children = (
+				5DF0AF3415E2A9490093C081 /* feedback */,
 				5DF0AEF915E14F130093C081 /* settings */,
 				5DC2586515E0EC66007F6EEE /* models */,
 				5DC60FC415E0575900DC96C5 /* newpost */,
@@ -410,6 +418,8 @@
 		5D8AFFE615DFDB96004241D5 /* graphics */ = {
 			isa = PBXGroup;
 			children = (
+				5DF0AF3815E2ACB50093C081 /* brownlinen.png */,
+				5DF0AF3915E2ACB50093C081 /* brownlinen@2x.png */,
 				5D8E635E15DFFB4500DC11FF /* navigationbar.png */,
 				5D8E635F15DFFB4500DC11FF /* navigationbar@2x.png */,
 				5D8AFFE715DFDB96004241D5 /* nav-menu-icon-active.png */,
@@ -486,6 +496,15 @@
 				5DF0AEFC15E14F250093C081 /* XTSettingsViewController.m */,
 			);
 			path = settings;
+			sourceTree = "<group>";
+		};
+		5DF0AF3415E2A9490093C081 /* feedback */ = {
+			isa = PBXGroup;
+			children = (
+				5DF0AF3515E2A95A0093C081 /* XTFeedbackViewController.h */,
+				5DF0AF3615E2A95A0093C081 /* XTFeedbackViewController.m */,
+			);
+			path = feedback;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -579,6 +598,8 @@
 				5DC2587B15E11531007F6EEE /* whitedot@2x.png in Resources */,
 				5DF0AF0C15E285BA0093C081 /* quickreply.png in Resources */,
 				5DF0AF0D15E285BA0093C081 /* quickreply@2x.png in Resources */,
+				5DF0AF3A15E2ACB50093C081 /* brownlinen.png in Resources */,
+				5DF0AF3B15E2ACB50093C081 /* brownlinen@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -623,6 +644,7 @@
 				5DC2588115E1197F007F6EEE /* User+coolstuff.m in Sources */,
 				5DF0AEFD15E14F250093C081 /* XTSettingsViewController.m in Sources */,
 				5DF0AF1315E288300093C081 /* XTMention.m in Sources */,
+				5DF0AF3715E2A95A0093C081 /* XTFeedbackViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

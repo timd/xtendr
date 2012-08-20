@@ -175,6 +175,15 @@
     NSError *error;
     [self.fetchedResultsController performFetch:&error];
 
+	/*
+	 //DONT DO THIS YET
+	if(self.fetchedResultsController.fetchedObjects && self.fetchedResultsController.fetchedObjects.count)
+	{
+		Post * firstPost = [self.fetchedResultsController.fetchedObjects objectAtIndex:0];
+		self.firstID = firstPost.id;
+	}
+	 */
+
 }
 
 - (void)viewDidUnload
@@ -288,10 +297,6 @@
 
  
  */
-
-
-
-
 	if(self.loadRequest)
 	{
 		DLog(@"load already in progress!");
@@ -306,6 +311,10 @@
 		[params setObject:self.firstID
 				   forKey:@"since_id"];
 	}
+
+	[params setObject:[NSNumber numberWithUnsignedInteger:100]
+			   forKey:@"count"];
+
 	DLog(@"params = %@", params);
 
 	NSString * path;
@@ -342,7 +351,9 @@
 																				fromMentions:self.timelineMode == kMentionsTimelineMode];
 
 											 self.firstID	= [[temp objectAtIndex:0] objectForKey:@"id"];
-											 //self.lastID	= [[temp lastObject] objectForKey:@"id"];
+
+											 if(!self.lastID)
+												 self.lastID	= [[temp lastObject] objectForKey:@"id"];
 
 											 self.lastLoadCount = temp.count;
 
@@ -428,6 +439,9 @@
 		[params setObject:self.lastID
 				   forKey:@"before_id"];
 	}
+
+	[params setObject:[NSNumber numberWithBool:100]
+			   forKey:@"count"];
 
 	NSString * path;
 	if(self.timelineMode == kMyTimelineMode)
@@ -645,6 +659,8 @@
 
 -(void)doTestFetch
 {
+	return;
+	
 	if(self.timelineMode != kGlobalTimelineMode)
 		return;
 

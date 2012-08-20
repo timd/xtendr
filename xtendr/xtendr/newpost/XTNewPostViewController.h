@@ -12,5 +12,7 @@
 
 @property(strong) Post		*replyToPost;
 
+@property(strong) NSString	*prepopulateText;
+
 
 @end

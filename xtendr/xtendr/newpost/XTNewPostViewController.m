@@ -87,6 +87,11 @@
 		self.theCell.textView.text = startText;
 		[self textViewDidChange:self.theCell.textView];
 	}
+	else if(self.prepopulateText)
+	{
+		self.theCell.textView.text = self.prepopulateText;
+		[self textViewDidChange:self.theCell.textView];
+	}
 
 }
 

@@ -69,7 +69,7 @@
 		return 5;
 
 	if(section == 1)
-		return 2;
+		return 3;
 
 	return 0;
 }
@@ -160,8 +160,16 @@
 			cell.chevron.hidden = NO;
 			cell.textLabel.text = NSLocalizedString(@"Settings", @"");
         }
-		
+
 		if(indexPath.row == 1)
+        {
+            cell.badge.hidden	= NO;
+			cell.badge.text		= @"!";
+			cell.chevron.hidden = NO;
+			cell.textLabel.text = NSLocalizedString(@"Feedback", @"");
+        }
+
+		if(indexPath.row == 2)
         {
             cell.badge.hidden	= YES;
 			cell.chevron.hidden = YES;
@@ -208,6 +216,11 @@
 		}
 
 		if(indexPath.row == 1)
+        {
+			[[XTAppDelegate sharedInstance] switchToFeedbackView];
+		}
+
+		if(indexPath.row == 2)
         {
 			[self logoutPressed:self];
 		}

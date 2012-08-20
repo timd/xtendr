@@ -10,6 +10,7 @@
 
 #import "XTHTTPClient.h"
 
+
 @interface XTSettingsViewController ()
 
 @end
@@ -59,15 +60,12 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 2;
+    return 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-	if(section == 0)
-		return 2;
-    return 1;
+	return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -81,23 +79,6 @@
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 	}
 
-	if(indexPath.section == 0)
-	{
-		if(indexPath.row == 0)
-		{
-			cell.textLabel.text = NSLocalizedString(@"Feedback via app.net", @"");
-		}
-		if(indexPath.row == 1)
-		{
-			cell.textLabel.text = NSLocalizedString(@"Feedback via email", @"");
-		}
-	}
-	else if(indexPath.section == 1)
-	{
-		cell.textLabel.text = NSLocalizedString(@"follow @tonymillion", @"");
-	}
-
-    
     return cell;
 }
 
@@ -105,31 +86,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if(indexPath.section == 0)
-	{
-		if(indexPath.row == 0)
-		{
-			//TODO: bring up post composer prepopulated with @"@tonymillion #xtendr "
-		}
-		if(indexPath.row == 1)
-		{
-			//TODO: bring up email feedback thing
-		}
-	}
-
-	if(indexPath.section==1)
-	{
-		[[XTHTTPClient sharedClient] postPath:@"users/7833/follow"
-								   parameters:nil
-									  success:^(TMHTTPRequest *operation, id responseObject) {
-										  DLog(@"Follow success");
-									  }
-									  failure:^(TMHTTPRequest *operation, NSError *error) {
-										  DLog(@"Follow fail: %@", operation.responseString);
-									  }];
-	}
-
-	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

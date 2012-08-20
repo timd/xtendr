@@ -145,7 +145,7 @@ NSString *const kXTProfileRefreshedNotification			= @"kXTProfileRefreshedNotific
 	[[XTHTTPClient sharedClient] getPath:@"token"
 							  parameters:nil
 								 success:^(TMHTTPRequest *operation, id responseObject) {
-									 DLog(@"refreshProfile S: %@", responseObject);
+									 //DLog(@"refreshProfile S: %@", responseObject);
 									 // we dont send this here cos it screws the UI, innit
 
 

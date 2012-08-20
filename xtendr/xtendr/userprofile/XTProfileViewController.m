@@ -19,6 +19,8 @@
 #import "XTPostController.h"
 #import "XTTimelineCell.h"
 
+#import "XTNewPostViewController.h"
+
 @interface XTProfileViewController () <NSFetchedResultsControllerDelegate>
 
 @property(weak) IBOutlet UIView			*headerView;
@@ -38,6 +40,8 @@
 
 -(void)setupHeader
 {
+	DLog(@"set up header");
+	
 	User * tempUser;
 
 	if(self.userfetchedResultsController.fetchedObjects.count)
@@ -51,7 +55,7 @@
 	if(cover)
 	{
 		[self.headerBackgroundImageView loadFromURL:cover.url
-								   placeholderImage:[UIImage imageNamed:@"unknown"]
+								   placeholderImage:[UIImage imageNamed:@"brownlinen"]
 										  fromCache:(TMDiskCache*)[XTAppDelegate sharedInstance].userCoverArtCache];
 	}
 
@@ -59,7 +63,7 @@
 	if(avatar)
 	{
 		[self.userImageView loadFromURL:avatar.url
-					   placeholderImage:[UIImage imageNamed:@"unknown"]
+					   placeholderImage:[UIImage imageNamed:@"brownlinen"]
 							  fromCache:(TMDiskCache*)[XTAppDelegate sharedInstance].userProfilePicCache];
 	}
 }
@@ -222,6 +226,17 @@
 	XTTimelineCell *cell = [tableView dequeueReusableCellWithIdentifier:@"timelineCell"];
 
 	cell.post = post;
+
+	cell.quickReplyBlock = ^(Post * post)
+	{
+		XTNewPostViewController * npvc = [[XTNewPostViewController alloc] init];
+		npvc.replyToPost = post;
+
+		[self presentViewController:[[UINavigationController alloc] initWithRootViewController:npvc]
+						   animated:YES
+						 completion:nil];
+	};
+
 	return cell;
 }
 

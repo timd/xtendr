@@ -22,6 +22,8 @@
 #import "XTHTTPClient.h"
 
 #import "XTSettingsViewController.h"
+#import "XTFeedbackViewController.h"
+
 
 NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 
@@ -253,6 +255,12 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 {
 	XTSettingsViewController *svc = [[XTSettingsViewController alloc] init];
 	[self switchToViewController:svc];
+}
+
+-(void)switchToFeedbackView
+{
+	XTFeedbackViewController *fvc = [[XTFeedbackViewController alloc] init];
+	[self switchToViewController:fvc];
 }
 
 

@@ -35,5 +35,6 @@
 -(void)switchToProfileView;
 
 -(void)switchToSettingsView;
+-(void)switchToFeedbackView;
 
 @end

@@ -60,12 +60,27 @@
 	if(post)
 	{
 		//merge user
-		DLog(@"Merge post");
+		// The idea behind this is to try and NOT touch anything inside of the managedobject
+		// if we can at all help it as then it'll have to be written to disk
+		// which will lock up the UI now and again!
+		//DLog(@"Merge post");
+		if(!post.thread_id)
+			post.thread_id		= [postDict objectForKey:@"thread_id"];
+
+		if(post.num_replies && [postDict objectForKey:@"num_replies"])
+		{
+			if(![post.num_replies isEqual:[postDict objectForKey:@"num_replies"]])
+				post.num_replies	= [postDict objectForKey:@"num_replies"];
+		}
+		else
+		{
+			post.num_replies	= [postDict objectForKey:@"num_replies"];
+		}
 	}
 	else
 	{
 		//create user
-		DLog(@"Create post: %@", ID);
+		//DLog(@"Create post: %@", ID);
 		post = [Post postByID:ID inContext:context createIfNecessary:YES];
 
 		//right now we dont do ANY merging or whatever, we just overwrite with what we have
@@ -93,30 +108,46 @@
 				DLog(@"User not present for postid: %@", post.id);
 			}
 		}
+
+		if(!post.created_at)
+			post.created_at		= [self.ISO8601Formatter dateFromString:[postDict objectForKey:@"created_at"]];
+
+		if([postDict objectForKey:@"text"])
+			post.text			= [postDict objectForKey:@"text"];
+		if([postDict objectForKey:@"html"])
+			post.html			= [postDict objectForKey:@"html"];
+
+
+		//YUCK WHAT ABOUT THIS
+		if(!post.annotations_dict)
+			post.annotations_dict	= [postDict objectForKey:@"annotations"];
+
+		if(!post.entities_dict)
+			post.entities_dict		= [postDict objectForKey:@"entities"];
+
+		if(!post.source_link || !post.source_name)
+		{
+			NSDictionary * source = [postDict objectForKey:@"source"];
+			post.source_link	= [source objectForKey:@"link"];
+			post.source_name	= [source objectForKey:@"name"];
+		}
+
+		if(!post.reply_to)
+			post.reply_to		= [postDict objectForKey:@"reply_to"];
+
+		if(!post.thread_id)
+			post.thread_id		= [postDict objectForKey:@"thread_id"];
 	}
 
-	post.created_at		= [self.ISO8601Formatter dateFromString:[postDict objectForKey:@"created_at"]];
-
-	if([postDict objectForKey:@"text"])
-		post.text			= [postDict objectForKey:@"text"];
-	if([postDict objectForKey:@"html"])
-		post.html			= [postDict objectForKey:@"html"];
-
-	post.reply_to		= [postDict objectForKey:@"reply_to"];
-	post.thread_id		= [postDict objectForKey:@"thread_id"];
-	post.num_replies	= [postDict objectForKey:@"num_replies"];
-
 	if([postDict objectForKey:@"is_deleted"])
+	{
 		post.is_deleted		= [postDict objectForKey:@"is_deleted"];
+	}
 	else
-		post.is_deleted		= [NSNumber numberWithBool:NO];
-
-	post.annotations_dict	= [postDict objectForKey:@"annotations"];
-	post.entities_dict		= [postDict objectForKey:@"entities"];
-
-	NSDictionary * source = [postDict objectForKey:@"source"];
-	post.source_link	= [source objectForKey:@"link"];
-	post.source_name	= [source objectForKey:@"name"];
+	{
+		if(!post.is_deleted)
+			post.is_deleted		= [NSNumber numberWithBool:NO];
+	}
 
 	//Ok so what we do here, is as we're merging the post
 	// if this isn't set, then lets see if it came from a list
