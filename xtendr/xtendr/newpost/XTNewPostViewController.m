@@ -43,6 +43,16 @@
          forCellReuseIdentifier:@"XTNewPostCell"];
 
     self.theCell = [self.tableView dequeueReusableCellWithIdentifier:@"XTNewPostCell"];
+
+	if(self.replyToPost)
+	{
+		self.theCell.replyToLabel.hidden = NO;
+	}
+	else
+	{
+		self.theCell.replyToLabel.hidden = YES;
+	}
+
 	//self.theCell.finalDelegate = self;
     //self.theCell.user = [ZZProfileController sharedInstance].user;
 
@@ -58,6 +68,18 @@
                                                                                            action:@selector(save:)];
 
 	self.navigationItem.rightBarButtonItem.enabled = NO;
+
+	if(self.replyToPost)
+	{
+		NSMutableString * startText = [[NSMutableString alloc] init];
+		for (XTMention * mention in self.replyToPost.mentions) {
+
+			[startText appendFormat:@"@%@ ", mention.name];
+		}
+
+		self.theCell.textView.text = startText;
+		[self textViewDidChange:self.theCell.textView];
+	}
 
 }
 
@@ -164,9 +186,9 @@
 	[params setObject:self.theCell.textView.text
 			   forKey:@"text"];
 
-	if(self.replyToPostID)
+	if(self.replyToPost)
 	{
-		[params setObject:self.replyToPostID
+		[params setObject:self.replyToPost.id
 				   forKey:@"reply_to"];
 	}
 

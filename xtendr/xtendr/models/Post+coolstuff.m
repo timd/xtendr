@@ -48,4 +48,23 @@
 	return temp;
 }
 
+-(NSDictionary*)entities
+{
+	return self.entities;
+}
+
+-(NSArray*)mentions
+{
+	NSDictionary * entities = self.entities_dict;
+	NSMutableArray *mentions = [NSMutableArray arrayWithCapacity:4];
+
+	for (NSDictionary * mentionDict in [entities objectForKey:@"mentions"]) {
+		XTMention * mention = [[XTMention alloc] initWithAttributes:mentionDict];
+		[mentions addObject:mention];
+	}
+
+	return mentions;
+}
+
+
 @end

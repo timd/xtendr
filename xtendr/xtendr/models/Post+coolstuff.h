@@ -8,9 +8,15 @@
 
 #import "Post.h"
 
+#import	"XTMention.h"
+
 @interface Post (coolstuff)
 
 +(Post*)postByID:(NSString*)id inContext:(NSManagedObjectContext*)context;
 +(Post*)postByID:(NSString*)id inContext:(NSManagedObjectContext*)context createIfNecessary:(BOOL)create;
+
+-(NSDictionary*)entities;
+
+-(NSArray*)mentions;
 
 @end

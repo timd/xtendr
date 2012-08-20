@@ -111,8 +111,8 @@
 	else
 		post.is_deleted		= [NSNumber numberWithBool:NO];
 
-	post.annotations	= [postDict objectForKey:@"annotations"];
-	post.entities		= [postDict objectForKey:@"entities"];
+	post.annotations_dict	= [postDict objectForKey:@"annotations"];
+	post.entities_dict		= [postDict objectForKey:@"entities"];
 
 	NSDictionary * source = [postDict objectForKey:@"source"];
 	post.source_link	= [source objectForKey:@"link"];

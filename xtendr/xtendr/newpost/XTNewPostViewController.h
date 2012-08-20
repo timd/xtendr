@@ -10,7 +10,7 @@
 
 @interface XTNewPostViewController : UITableViewController
 
-@property(strong) NSString					*replyToPostID;
+@property(strong) Post		*replyToPost;
 
 
 @end

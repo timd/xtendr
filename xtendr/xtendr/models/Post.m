@@ -12,9 +12,9 @@
 
 @implementation Post
 
-@dynamic annotations;
+@dynamic annotations_dict;
 @dynamic created_at;
-@dynamic entities;
+@dynamic entities_dict;
 @dynamic html;
 @dynamic id;
 @dynamic intid;

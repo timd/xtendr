@@ -85,6 +85,9 @@
 		5DC60FC915E0584900DC96C5 /* XTNewPostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DC60FC815E0584900DC96C5 /* XTNewPostCell.xib */; };
 		5DC60FCC15E0585B00DC96C5 /* XTNewPostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DC60FCB15E0585B00DC96C5 /* XTNewPostCell.m */; };
 		5DF0AEFD15E14F250093C081 /* XTSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DF0AEFC15E14F250093C081 /* XTSettingsViewController.m */; };
+		5DF0AF0C15E285BA0093C081 /* quickreply.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DF0AF0A15E285B90093C081 /* quickreply.png */; };
+		5DF0AF0D15E285BA0093C081 /* quickreply@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DF0AF0B15E285BA0093C081 /* quickreply@2x.png */; };
+		5DF0AF1315E288300093C081 /* XTMention.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DF0AF1215E288300093C081 /* XTMention.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -201,6 +204,10 @@
 		5DC60FCB15E0585B00DC96C5 /* XTNewPostCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTNewPostCell.m; sourceTree = "<group>"; };
 		5DF0AEFB15E14F250093C081 /* XTSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTSettingsViewController.h; sourceTree = "<group>"; };
 		5DF0AEFC15E14F250093C081 /* XTSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTSettingsViewController.m; sourceTree = "<group>"; };
+		5DF0AF0A15E285B90093C081 /* quickreply.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = quickreply.png; sourceTree = "<group>"; };
+		5DF0AF0B15E285BA0093C081 /* quickreply@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "quickreply@2x.png"; sourceTree = "<group>"; };
+		5DF0AF1115E288300093C081 /* XTMention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTMention.h; sourceTree = "<group>"; };
+		5DF0AF1215E288300093C081 /* XTMention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTMention.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -375,6 +382,8 @@
 		5D8AFFE215DFD783004241D5 /* timeline */ = {
 			isa = PBXGroup;
 			children = (
+				5DF0AF0A15E285B90093C081 /* quickreply.png */,
+				5DF0AF0B15E285BA0093C081 /* quickreply@2x.png */,
 				5DC2587815E11531007F6EEE /* whitedot.png */,
 				5DC2587915E11531007F6EEE /* whitedot@2x.png */,
 				5D8E635615DFF03C00DC11FF /* unknown.png */,
@@ -452,6 +461,8 @@
 				5DC2586A15E0EDB3007F6EEE /* XTImageObject.m */,
 				5DC2586615E0EC78007F6EEE /* XTProfileUser.h */,
 				5DC2586715E0EC78007F6EEE /* XTProfileUser.m */,
+				5DF0AF1115E288300093C081 /* XTMention.h */,
+				5DF0AF1215E288300093C081 /* XTMention.m */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -566,6 +577,8 @@
 				5DC2586415E0DDDD007F6EEE /* Default.png in Resources */,
 				5DC2587A15E11531007F6EEE /* whitedot.png in Resources */,
 				5DC2587B15E11531007F6EEE /* whitedot@2x.png in Resources */,
+				5DF0AF0C15E285BA0093C081 /* quickreply.png in Resources */,
+				5DF0AF0D15E285BA0093C081 /* quickreply@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -609,6 +622,7 @@
 				5DC2587E15E11942007F6EEE /* Post+coolstuff.m in Sources */,
 				5DC2588115E1197F007F6EEE /* User+coolstuff.m in Sources */,
 				5DF0AEFD15E14F250093C081 /* XTSettingsViewController.m in Sources */,
+				5DF0AF1315E288300093C081 /* XTMention.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -23,6 +23,7 @@
 @property(weak) IBOutlet UIImageView			*userPhoto;
 @property(weak) IBOutlet UIImageView			*thoughtBubbleBackImageView;
 @property(weak) IBOutlet TTTAttributedLabel		*thoughtLabel;
+@property(weak) IBOutlet UIButton				*quickReplyButton;
 
 @property(assign) CGFloat						labelHeight;
 
@@ -105,6 +106,8 @@
 	self.thoughtBubbleBackImageView.frame = CGRectMake(45, 5, 263, self.labelHeight+15);
 	self.thoughtLabel.frame = CGRectMake(60, 10, 240, self.labelHeight);
 
+	self.quickReplyButton.frame = CGRectMake(286, self.labelHeight-5, 20, 20);
+
 }
 
 +(CGFloat)cellHeightForPost:(Post*)post
@@ -139,6 +142,16 @@
 	if(self.faceTapBlock)
 	{
 		self.faceTapBlock(_post);
+	}
+}
+
+-(IBAction)quickReplyTapped:(id)sender
+{
+	DLog(@"quickReplyTapped!");
+
+	if(self.quickReplyBlock)
+	{
+		self.quickReplyBlock(_post);
 	}
 }
 

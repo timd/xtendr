@@ -13,5 +13,7 @@
 @property(weak) IBOutlet UITextView		*textView;
 @property(weak) IBOutlet UILabel		*charsLeftLabel;
 
+@property(weak) IBOutlet UILabel		*replyToLabel;
+
 
 @end

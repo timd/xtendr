@@ -13,9 +13,9 @@
 
 @interface Post : NSManagedObject
 
-@property (nonatomic, retain) id annotations;
+@property (nonatomic, retain) id annotations_dict;
 @property (nonatomic, retain) NSDate * created_at;
-@property (nonatomic, retain) id entities;
+@property (nonatomic, retain) id entities_dict;
 @property (nonatomic, retain) NSString * html;
 @property (nonatomic, retain) NSString * id;
 @property (nonatomic, retain) NSNumber * intid;

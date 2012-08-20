@@ -17,8 +17,6 @@
 @property(weak) IBOutlet UIImageView	*userPictureImageView;
 @property(weak) IBOutlet UIImageView	*textBackgroundImageView;
 
-
-
 @end
 
 @implementation XTNewPostCell
@@ -47,7 +45,6 @@
     l.cornerRadius  = 7;
     l.borderWidth   = 1;
     l.borderColor   = [UIColor darkGrayColor].CGColor;
-
 
 	[self.userPictureImageView loadFromURL:[XTProfileController sharedInstance].profileUser.avatar_image.url
 						  placeholderImage:[UIImage imageNamed:@"unknown"]

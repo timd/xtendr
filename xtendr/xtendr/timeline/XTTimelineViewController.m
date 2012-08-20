@@ -28,6 +28,8 @@
 @property(weak) IBOutlet UIActivityIndicatorView *headerActivityIndicator;
 @property(weak) IBOutlet UILabel				*lastRefreshLabel;
 
+@property(weak) IBOutlet UIButton				*quickReplyButton;
+
 @property(assign) BOOL							inDrag;
 @property(assign) BOOL							refreshOnRelease;
 
@@ -234,6 +236,16 @@
 	{
 		XTProfileViewController * pvc = [[XTProfileViewController alloc] initWithUserID:post.userid];
 		[self.navigationController pushViewController:pvc animated:YES];
+	};
+
+	cell.quickReplyBlock = ^(Post * post)
+	{
+		XTNewPostViewController * npvc = [[XTNewPostViewController alloc] init];
+		npvc.replyToPost = post;
+		
+		[self presentViewController:[[UINavigationController alloc] initWithRootViewController:npvc]
+						   animated:YES
+						 completion:nil];
 	};
 	
 	return cell;
