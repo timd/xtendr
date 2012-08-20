@@ -54,6 +54,7 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 	[TestFlight takeOff:@"b0e0f25f6e562d4dbed0b8bdad6abdc3_MTIyNjc1MjAxMi0wOC0xOCAwOTozNDo0My4yMTkyNzc"];
 
 	// primes the profile!
+	[self managedObjectContext];
 	[XTProfileController sharedInstance];
 
 	[[NSNotificationCenter defaultCenter] addObserver:self
@@ -258,10 +259,14 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 -(void)logout
 {
 	[[XTProfileController sharedInstance] logout];
-
+	
 	self.myTimelineController		= nil;
 	self.globalTimelineController	= nil;
 	self.mentionsTimelineController = nil;
+
+	// clear out all old data!
+	[self resetPersistentStore];
+
 }
 
 
@@ -351,6 +356,8 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 		{
 			DLog(@"Unresolved error %@, %@", error, [error userInfo]);
 		}
+
+		DLog(@"Deleting: %@", store.URL.absoluteString);
 
 		if (![[NSFileManager defaultManager] removeItemAtURL:store.URL
 													   error:&error])

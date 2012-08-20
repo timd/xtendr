@@ -12,7 +12,7 @@
 
 +(XTPostController*)sharedInstance;
 
--(void)addPostArray:(NSArray*)postArray;
--(void)addPost:(NSDictionary*)post;
+-(void)addPostArray:(NSArray*)postArray fromMyStream:(BOOL)myStream fromMentions:(BOOL)mentions;
+-(void)addPost:(NSDictionary*)post fromMyStream:(BOOL)myStream fromMentions:(BOOL)mentions;
 
 @end

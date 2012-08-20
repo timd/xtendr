@@ -12,6 +12,9 @@
 
 +(XTUserController*)sharedInstance;
 
+-(User*)insertUser:(NSDictionary*)userDict inContext:(NSManagedObjectContext*)context;
+
+
 -(void)addUsersFromArray:(NSArray*)userDictArray;
 -(void)addUser:(NSDictionary*)userDict;
 

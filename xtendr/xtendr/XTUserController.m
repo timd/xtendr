@@ -36,7 +36,7 @@
 }
 
 //everything funnels in here
--(void)internalUserStuff:(NSDictionary*)userDict inContext:(NSManagedObjectContext*)context
+-(User*)insertUser:(NSDictionary*)userDict inContext:(NSManagedObjectContext*)context
 {
 	NSString * ID = [userDict valueForKey:@"id"];
 
@@ -54,8 +54,11 @@
 	}
 
 	// right now we dont do ANY merging or whatever, we just overwrite with what we have
-	user.username	= [userDict objectForKey:@"username"];
-	user.name		= [userDict objectForKey:@"name"];
+	if([userDict objectForKey:@"username"])
+		user.username	= [userDict objectForKey:@"username"];
+
+	if([userDict objectForKey:@"name"])
+		user.name		= [userDict objectForKey:@"name"];
 
 	NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];
@@ -80,6 +83,7 @@
 		user.cover_image_dict = [userDict objectForKey:@"cover_image"];
 
 	//DO NOT SAVE HERE
+	return user;
 }
 
 //stuff to process on a background thread so we dont hang the UI too much
@@ -90,7 +94,7 @@
 
 	for (NSDictionary * userDict in userArray)
 	{
-		[self internalUserStuff:userDict inContext:context];
+		[self insertUser:userDict inContext:context];
 	}
 
 	NSError * error;
@@ -106,7 +110,7 @@
 	NSManagedObjectContext * context = [[NSManagedObjectContext alloc] init];
 	[context setPersistentStoreCoordinator:[XTAppDelegate sharedInstance].persistentStoreCoordinator];
 
-	[self internalUserStuff:userDict inContext:context];
+	[self insertUser:userDict inContext:context];
 
 	NSError * error;
 	if([context hasChanges] && ![context save:&error])

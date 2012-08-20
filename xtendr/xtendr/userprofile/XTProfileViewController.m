@@ -27,6 +27,8 @@
 @property(copy) NSString						*internalUserID;
 @property(strong) NSFetchedResultsController	*fetchedResultsController;
 
+@property(strong) NSFetchedResultsController	*postsFetchedResultsController;
+
 @end
 
 @implementation XTProfileViewController
@@ -237,18 +239,39 @@
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
 	DLog(@"controllerWillChangeContent");
+	if(controller == self.postsFetchedResultsController)
+	{
+
+	}
+	else
+	{
+		
+	}
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
 	DLog(@"controllerDidChangeContent");
-	[self setupHeader];
+	if(controller == self.postsFetchedResultsController)
+	{
+
+	}
+	else
+	{
+		[self setupHeader];
+	}
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
 {
 	DLog(@"didChangeObject");
-	[self setupHeader];
+	if(controller == self.fetchedResultsController)
+	{
+		[self setupHeader];
+		return;
+	}
+
+	//ok now we do the funky table stuff!
 }
 
 

@@ -123,12 +123,12 @@
     cell.chevron.hidden = NO;
     if(indexPath.section == 0)
     {
-        if(indexPath.row == 0)
+        if(indexPath.row == 1)
         {
             cell.badge.hidden = YES;
 			cell.textLabel.text = NSLocalizedString(@"My Stream", @"");
         }
-        else if(indexPath.row == 1)
+        else if(indexPath.row == 0)
         {
             cell.textLabel.text = NSLocalizedString(@"Global Stream", @"");
 			cell.badge.hidden = YES;
@@ -180,13 +180,13 @@
 {
     if(indexPath.section == 0)
     {
-        if(indexPath.row == 0)
-        {
-			[[XTAppDelegate sharedInstance] switchToMyTimelineView];
-		}
-		if(indexPath.row == 1)
+		if(indexPath.row == 0)
         {
 			[[XTAppDelegate sharedInstance] switchToGlobalTimelineView];
+		}
+        if(indexPath.row == 1)
+        {
+			[[XTAppDelegate sharedInstance] switchToMyTimelineView];
 		}
 		if(indexPath.row == 2)
         {

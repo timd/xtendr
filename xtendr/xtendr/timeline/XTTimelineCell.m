@@ -112,17 +112,28 @@
 
 }
 
--(void)setPostText:(NSString*)postText username:(NSString*)username pictureURL:(NSString*)picURL
+-(void)setPostText:(NSString*)postText username:(NSString*)username pictureURL:(NSURL*)picURL
 {
 	NSAttributedString* attrText = [XTTimelineCell attributedStringForPost:postText andUsername:username];
 	self.thoughtLabel.text = attrText;
 
 	self.labelHeight = [attrText heightForWidth:240];
 
-	[self.userPhoto loadFromURL:[NSURL URLWithString:picURL]
+	[self.userPhoto loadFromURL:picURL
 			   placeholderImage:[UIImage imageNamed:@"unknown"]
 					  fromCache:[XTAppDelegate sharedInstance].userProfilePicCache];
 }
+
++(CGFloat)cellHeightForPost:(Post*)post
+{
+	return 0;
+}
+
+-(void)setPost:(Post*)post
+{
+	
+}
+
 
 
 -(IBAction)userPhotoTapped:(id)sender

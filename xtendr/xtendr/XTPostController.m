@@ -11,6 +11,8 @@
 #import "Post.h"
 #import "Post+coolstuff.h"
 
+#import "XTUserController.h"
+
 @interface XTPostController ()
 
 @property(strong) NSDateFormatter		*ISO8601Formatter;
@@ -47,10 +49,10 @@
 }
 
 //everything funnels in here
--(void)internalPostStuff:(NSDictionary*)postDict
+-(Post*)internalPostStuff:(NSDictionary*)postDict
 			   inContext:(NSManagedObjectContext*)context
 			   isMention:(BOOL)isMention
-			  ifMyStream:(BOOL)isMyStream
+			  isMyStream:(BOOL)isMyStream
 {
 	NSString * ID = [postDict valueForKey:@"id"];
 
@@ -65,21 +67,49 @@
 		//create user
 		DLog(@"Create post");
 		post = [Post postByID:ID inContext:context createIfNecessary:YES];
-	}
 
-	//right now we dont do ANY merging or whatever, we just overwrite with what we have
-	//TODO: extract user object and link!
+		//right now we dont do ANY merging or whatever, we just overwrite with what we have
+		//TODO: extract user object and link!
+		if(!post.user)
+		{
+			NSDictionary * userDict = [postDict objectForKey:@"user"];
+			if(userDict)
+			{
+				User * user = [[XTUserController sharedInstance] insertUser:userDict
+																  inContext:context];
+				if(user)
+				{
+					//[user.managedObjectContext save:nil];
+					post.user = user;
+					post.userid = user.id;
+				}
+				else
+				{
+					DLog(@"Could not create user: %@", [userDict objectForKey:@"id"]);
+				}
+			}
+			else
+			{
+				DLog(@"User not present for postid: %@", post.id);
+			}
+		}
+	}
 
 	post.created_at		= [self.ISO8601Formatter dateFromString:[postDict objectForKey:@"created_at"]];
 
-	post.text			= [postDict objectForKey:@"text"];
-	post.html			= [postDict objectForKey:@"html"];
+	if([postDict objectForKey:@"text"])
+		post.text			= [postDict objectForKey:@"text"];
+	if([postDict objectForKey:@"html"])
+		post.html			= [postDict objectForKey:@"html"];
 
 	post.reply_to		= [postDict objectForKey:@"reply_to"];
 	post.thread_id		= [postDict objectForKey:@"thread_id"];
 	post.num_replies	= [postDict objectForKey:@"num_replies"];
-	post.is_deleted		= [postDict objectForKey:@"is_deleted"];
 
+	if([postDict objectForKey:@"is_deleted"])
+		post.is_deleted		= [postDict objectForKey:@"is_deleted"];
+	else
+		post.is_deleted		= [NSNumber numberWithBool:NO];
 
 	post.annotations	= [postDict objectForKey:@"annotations"];
 	post.entities		= [postDict objectForKey:@"entities"];
@@ -88,28 +118,41 @@
 	post.source_link	= [source objectForKey:@"link"];
 	post.source_name	= [source objectForKey:@"name"];
 
-	if(isMention)
+	//Ok so what we do here, is as we're merging the post
+	// if this isn't set, then lets see if it came from a list
+	// if so set the bool for that list
+	// if not drop out!
+	// BUT WE ONLY DO THIS IF IT HASN'T ALREADY BEEN SET INNIT!
+	if(post.is_mention == nil)
 	{
-		post.is_mention = [NSNumber numberWithBool:YES];
+		if(isMention)
+		{
+			post.is_mention = [NSNumber numberWithBool:YES];
+		}
 	}
 
-	if(isMyStream)
+	if(post.is_mystream == nil)
 	{
-		post.is_mystream = [NSNumber numberWithBool:YES];
+		if(isMyStream)
+		{
+			post.is_mystream = [NSNumber numberWithBool:YES];
+		}
 	}
 
 
 	//DO NOT SAVE HERE
+
+	return post;
 }
 
--(void)backgroundAddPostArray:(NSArray*)postArray
+-(void)backgroundAddPostArray:(NSArray*)postArray fromMyStream:(BOOL)myStream fromMentions:(BOOL)mentions
 {
 	NSManagedObjectContext * context = [[NSManagedObjectContext alloc] init];
 	[context setPersistentStoreCoordinator:[XTAppDelegate sharedInstance].persistentStoreCoordinator];
 
 	for (NSDictionary * postDict in postArray)
 	{
-		[self internalPostStuff:postDict inContext:context isMention:NO ifMyStream:NO];
+		[self internalPostStuff:postDict inContext:context isMention:mentions isMyStream:myStream];
 	}
 
 	NSError * error;
@@ -120,12 +163,12 @@
 	context = nil;
 }
 
--(void)backgroundAddPost:(NSDictionary*)postDict
+-(void)backgroundAddPost:(NSDictionary*)postDict fromMyStream:(BOOL)myStream fromMentions:(BOOL)mentions
 {
 	NSManagedObjectContext * context = [[NSManagedObjectContext alloc] init];
 	[context setPersistentStoreCoordinator:[XTAppDelegate sharedInstance].persistentStoreCoordinator];
 
-	[self internalPostStuff:postDict inContext:context isMention:NO ifMyStream:NO];
+	[self internalPostStuff:postDict inContext:context isMention:mentions isMyStream:myStream];
 
 	NSError * error;
 	if([context hasChanges] && ![context save:&error])
@@ -135,20 +178,20 @@
 	context = nil;
 }
 
--(void)addPostArray:(NSArray*)postArray
+-(void)addPostArray:(NSArray*)postArray fromMyStream:(BOOL)myStream fromMentions:(BOOL)mentions
 {
 	if(postArray.count == 0)
 		return;
 
 	dispatch_async(_addQueue, ^{
-		[self backgroundAddPostArray:postArray];
+		[self backgroundAddPostArray:postArray fromMyStream:myStream fromMentions:mentions];
 	});
 }
 
--(void)addPost:(NSDictionary*)postDict
+-(void)addPost:(NSDictionary*)postDict fromMyStream:(BOOL)myStream fromMentions:(BOOL)mentions
 {
 	dispatch_async(_addQueue, ^{
-		[self backgroundAddPost:postDict];
+		[self backgroundAddPost:postDict fromMyStream:myStream fromMentions:mentions];
 	});
 }
 

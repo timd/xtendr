@@ -8,17 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
-@class XTTimelineCell;
+#import "Post.h"
 
-typedef void (^faceTapBlock)(XTTimelineCell  *cell);
+typedef void (^faceTapBlock)(Post  *post);
 
 @interface XTTimelineCell : UITableViewCell
 
 @property(nonatomic, copy) faceTapBlock		faceTapBlock;
-@property(nonatomic, strong) NSDictionary		*post;
+@property(nonatomic, strong) Post			*post;
 
 +(CGFloat)cellHeightForText:(NSString*)text withUsername:(NSString*)username;
+-(void)setPostText:(NSString*)postText username:(NSString*)username pictureURL:(NSURL*)picURL;
 
--(void)setPostText:(NSString*)postText username:(NSString*)username pictureURL:(NSString*)picURL;
++(CGFloat)cellHeightForPost:(Post*)post;
+-(void)setPost:(Post*)post;
+
 
 @end
