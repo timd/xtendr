@@ -6,6 +6,7 @@
         <attribute name="entities" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="html" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="intid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="is_deleted" optional="YES" attributeType="Boolean" indexed="YES" syncable="YES"/>
         <attribute name="is_mention" optional="YES" attributeType="Boolean" indexed="YES" syncable="YES"/>
         <attribute name="is_mystream" optional="YES" attributeType="Boolean" indexed="YES" syncable="YES"/>
@@ -28,6 +29,7 @@
         <attribute name="follows" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="follows_you" optional="YES" attributeType="Boolean" indexed="YES" syncable="YES"/>
         <attribute name="id" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="intid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="locale" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="postcount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -37,7 +39,7 @@
         <relationship name="posts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Post" inverseName="user" inverseEntity="Post" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Post" positionX="0" positionY="0" width="128" height="285"/>
+        <element name="Post" positionX="0" positionY="0" width="128" height="300"/>
         <element name="User" positionX="0" positionY="0" width="128" height="285"/>
     </elements>
 </model>

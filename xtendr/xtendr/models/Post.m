@@ -2,7 +2,7 @@
 //  Post.m
 //  xtendr
 //
-//  Created by Tony Million on 19/08/2012.
+//  Created by Tony Million on 20/08/2012.
 //  Copyright (c) 2012 Tony Million. All rights reserved.
 //
 
@@ -17,6 +17,7 @@
 @dynamic entities;
 @dynamic html;
 @dynamic id;
+@dynamic intid;
 @dynamic is_deleted;
 @dynamic is_mention;
 @dynamic is_mystream;

@@ -16,6 +16,9 @@
 
 #import "User+coolstuff.h"
 
+#import "XTPostController.h"
+#import "XTTimelineCell.h"
+
 @interface XTProfileViewController () <NSFetchedResultsControllerDelegate>
 
 @property(weak) IBOutlet UIView			*headerView;
@@ -25,7 +28,7 @@
 @property(weak) IBOutlet UILabel		*userPostCountLabel;
 
 @property(copy) NSString						*internalUserID;
-@property(strong) NSFetchedResultsController	*fetchedResultsController;
+@property(strong) NSFetchedResultsController	*userfetchedResultsController;
 
 @property(strong) NSFetchedResultsController	*postsFetchedResultsController;
 
@@ -37,8 +40,8 @@
 {
 	User * tempUser;
 
-	if(self.fetchedResultsController.fetchedObjects.count)
-		tempUser = [self.fetchedResultsController.fetchedObjects lastObject];
+	if(self.userfetchedResultsController.fetchedObjects.count)
+		tempUser = [self.userfetchedResultsController.fetchedObjects lastObject];
 
 	self.userNameLabel.text = [NSString stringWithFormat:@"%@ (%@)", tempUser.username, tempUser.id];
 
@@ -81,6 +84,11 @@
 	self.tableView.backgroundColor	= [UIColor colorWithPatternImage:[UIImage imageNamed:@"timelineback"]];
 	self.tableView.separatorStyle	= UITableViewCellSeparatorStyleNone;
 
+	[self.tableView registerNib:[UINib nibWithNibName:@"XTTimelineCell"
+                                               bundle:[NSBundle mainBundle]]
+         forCellReuseIdentifier:@"timelineCell"];
+
+
 	[[NSBundle mainBundle] loadNibNamed:@"XTProfileHeader"
                                   owner:self
                                 options:nil];
@@ -118,17 +126,51 @@
 	[fetchRequest setFetchLimit:1];
 
     // Create and initialize the fetchedResultsController.
-    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+    self.userfetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                         managedObjectContext:[XTAppDelegate sharedInstance].managedObjectContext
                                                                           sectionNameKeyPath:nil /* one section */
                                                                                    cacheName:nil];
 
-    self.fetchedResultsController.delegate = self;
+    self.userfetchedResultsController.delegate = self;
 
     NSError *error;
-    [self.fetchedResultsController performFetch:&error];
+    [self.userfetchedResultsController performFetch:&error];
 
 	[self setupHeader];
+
+
+
+
+	// Create and configure a fetch request.
+    NSFetchRequest *postsfetchRequest = [[NSFetchRequest alloc] init];
+
+    NSEntityDescription *postentity = [NSEntityDescription entityForName:@"Post"
+												  inManagedObjectContext:[XTAppDelegate sharedInstance].managedObjectContext];
+
+    [postsfetchRequest setEntity:postentity];
+
+	// limit to those entities to this ID
+    NSPredicate *postpredicate = [NSPredicate predicateWithFormat:@"userid == %@ AND is_deleted == %@", self.internalUserID, [NSNumber numberWithBool:NO]];
+    [postsfetchRequest setPredicate:postpredicate];
+
+    NSSortDescriptor *postsortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"intid" ascending:NO];
+    NSArray *postsortDescriptors = [[NSArray alloc] initWithObjects:postsortDescriptor, nil];
+    [postsfetchRequest setSortDescriptors:postsortDescriptors];
+
+	// we only want one object!
+	[postsfetchRequest setFetchLimit:20];
+
+    // Create and initialize the fetchedResultsController.
+    self.postsFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:postsfetchRequest
+																			 managedObjectContext:[XTAppDelegate sharedInstance].managedObjectContext
+																			   sectionNameKeyPath:nil /* one section */
+																						cacheName:nil];
+
+    self.postsFetchedResultsController.delegate = self;
+
+    NSError *postserror;
+    [self.postsFetchedResultsController performFetch:&postserror];
+
 
 }
 
@@ -144,6 +186,7 @@
 	[super viewWillAppear:animated];
 
 	[self downloadUserDetails:self.internalUserID];
+	[self downloadPostsForUser:self.internalUserID];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -156,27 +199,30 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 1;
+    return self.postsFetchedResultsController.sections.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 10;
+	id <NSFetchedResultsSectionInfo> sectionInfo = [self.postsFetchedResultsController.sections objectAtIndex:section];
+	return [sectionInfo numberOfObjects];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
-    // Configure the cell...
-	if(!cell)
-	{
-		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-	}
-    
-    return cell;
+	Post * post = [self.postsFetchedResultsController objectAtIndexPath:indexPath];
+	return [XTTimelineCell cellHeightForPost:post];
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	Post * post = [self.postsFetchedResultsController objectAtIndexPath:indexPath];
+
+	XTTimelineCell *cell = [tableView dequeueReusableCellWithIdentifier:@"timelineCell"];
+
+	cell.post = post;
+	return cell;
 }
 
 
@@ -227,6 +273,21 @@
 								 success:^(TMHTTPRequest *operation, id responseObject) {
 									 DLog(@"got posts: %@", responseObject);
 
+									 if(responseObject && [responseObject isKindOfClass:[NSArray class]])
+									 {
+										 NSArray * temp = responseObject;
+										 if(temp && temp.count)
+										 {
+											 [[XTPostController sharedInstance] addPostArray:responseObject
+																				fromMyStream:NO
+																				fromMentions:NO];
+
+											 //self.lastID = [[temp lastObject] objectForKey:@"id"];
+											 //self.lastLoadCount += temp.count;
+										 }
+									 }
+
+
 								 }
 								 failure:^(TMHTTPRequest *operation, NSError *error) {
 
@@ -241,7 +302,7 @@
 	DLog(@"controllerWillChangeContent");
 	if(controller == self.postsFetchedResultsController)
 	{
-
+		[self.tableView beginUpdates];
 	}
 	else
 	{
@@ -254,7 +315,7 @@
 	DLog(@"controllerDidChangeContent");
 	if(controller == self.postsFetchedResultsController)
 	{
-
+		[self.tableView endUpdates];
 	}
 	else
 	{
@@ -265,14 +326,57 @@
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
 {
 	DLog(@"didChangeObject");
-	if(controller == self.fetchedResultsController)
+	if(controller == self.userfetchedResultsController)
 	{
 		[self setupHeader];
 		return;
 	}
 
 	//ok now we do the funky table stuff!
+	UITableView *tableView = self.tableView;
+    switch(type)
+    {
+        case NSFetchedResultsChangeInsert:
+            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+                             withRowAnimation:UITableViewRowAnimationNone];
+            break;
+
+        case NSFetchedResultsChangeDelete:
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+                             withRowAnimation:UITableViewRowAnimationAutomatic];
+            break;
+
+        case NSFetchedResultsChangeUpdate:
+            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+                             withRowAnimation:UITableViewRowAnimationAutomatic];
+            break;
+
+        case NSFetchedResultsChangeMove:
+			[tableView moveRowAtIndexPath:indexPath toIndexPath:newIndexPath];
+            break;
+    }
+
 }
+
+- (void)controller:(NSFetchedResultsController *)controller
+  didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+           atIndex:(NSUInteger)sectionIndex
+     forChangeType:(NSFetchedResultsChangeType)type
+{
+    switch(type)
+    {
+        case NSFetchedResultsChangeInsert:
+            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex]
+                          withRowAnimation:UITableViewRowAnimationFade];
+            break;
+
+        case NSFetchedResultsChangeDelete:
+            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex]
+                          withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
 
 
 @end

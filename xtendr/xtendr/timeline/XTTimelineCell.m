@@ -62,17 +62,12 @@
 {
     NSMutableAttributedString * returnString = [[NSMutableAttributedString alloc] init];
 
+	[returnString appendAttributedString:[XTTimelineCell boldString:@"@"]];
 	[returnString appendAttributedString:[XTTimelineCell boldString:username]];
 	[returnString appendAttributedString:[XTTimelineCell normalString:@" "]];
 	[returnString appendAttributedString:[XTTimelineCell normalString:text]];
 
     return returnString;
-}
-
-+(CGFloat)cellHeightForText:(NSString*)text withUsername:(NSString*)username
-{
-	CGFloat height = [[XTTimelineCell attributedStringForPost:text andUsername:username] heightForWidth:240.0];
-	return MAX(10+height+3+16+10, 60);
 }
 
 -(void)awakeFromNib
@@ -112,26 +107,28 @@
 
 }
 
--(void)setPostText:(NSString*)postText username:(NSString*)username pictureURL:(NSURL*)picURL
-{
-	NSAttributedString* attrText = [XTTimelineCell attributedStringForPost:postText andUsername:username];
-	self.thoughtLabel.text = attrText;
-
-	self.labelHeight = [attrText heightForWidth:240];
-
-	[self.userPhoto loadFromURL:picURL
-			   placeholderImage:[UIImage imageNamed:@"unknown"]
-					  fromCache:[XTAppDelegate sharedInstance].userProfilePicCache];
-}
-
 +(CGFloat)cellHeightForPost:(Post*)post
 {
-	return 0;
+	CGFloat height = [[XTTimelineCell attributedStringForPost:post.text
+												  andUsername:post.user.username] heightForWidth:240.0];
+	return MAX(10+height+3+16+10, 60);
 }
 
 -(void)setPost:(Post*)post
 {
-	
+	_post = post;
+
+	NSAttributedString* attrText = [XTTimelineCell attributedStringForPost:_post.text
+															   andUsername:_post.user.username];
+	self.thoughtLabel.text = attrText;
+
+	self.labelHeight = [attrText heightForWidth:240];
+
+	[self.userPhoto loadFromURL:_post.user.avatar.url
+			   placeholderImage:[UIImage imageNamed:@"unknown"]
+					  fromCache:[XTAppDelegate sharedInstance].userProfilePicCache];
+
+	[self layoutIfNeeded];
 }
 
 
@@ -141,7 +138,7 @@
 	DLog(@"USER PHOTO TAPPED!");
 	if(self.faceTapBlock)
 	{
-		self.faceTapBlock(self);
+		self.faceTapBlock(_post);
 	}
 }
 

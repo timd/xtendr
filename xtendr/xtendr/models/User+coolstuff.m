@@ -36,16 +36,17 @@
 	return entry;
 }
 
-+(User*)userByID:(NSString*)id inContext:(NSManagedObjectContext*)context createIfNecessary:(BOOL)create
++(User*)userByID:(NSString*)ID inContext:(NSManagedObjectContext*)context createIfNecessary:(BOOL)create
 {
-	User * temp = [User userByID:id inContext:context];
+	User * temp = [User userByID:ID inContext:context];
 
 	if(!temp && create)
 	{
 		//TODO: create object and assign ID
 		temp = [NSEntityDescription insertNewObjectForEntityForName:@"User"
 											 inManagedObjectContext:context];
-		temp.id = id;
+		temp.id = ID;
+		temp.intid	= [NSNumber numberWithLongLong:[ID longLongValue]];
 	}
 
 	return temp;

@@ -31,16 +31,17 @@
 	return entry;
 }
 
-+(Post*)postByID:(NSString*)id inContext:(NSManagedObjectContext*)context createIfNecessary:(BOOL)create
++(Post*)postByID:(NSString*)ID inContext:(NSManagedObjectContext*)context createIfNecessary:(BOOL)create
 {
-	Post * temp = [Post postByID:id inContext:context];
+	Post * temp = [Post postByID:ID inContext:context];
 
 	if(!temp && create)
 	{
 		//TODO: create object and assign ID
 		temp = [NSEntityDescription insertNewObjectForEntityForName:@"Post"
 											 inManagedObjectContext:context];
-		temp.id = id;
+		temp.id		= ID;
+		temp.intid	= [NSNumber numberWithLongLong:[ID longLongValue]];
 
 	}
 

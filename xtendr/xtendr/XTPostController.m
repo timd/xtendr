@@ -65,7 +65,7 @@
 	else
 	{
 		//create user
-		DLog(@"Create post");
+		DLog(@"Create post: %@", ID);
 		post = [Post postByID:ID inContext:context createIfNecessary:YES];
 
 		//right now we dont do ANY merging or whatever, we just overwrite with what we have

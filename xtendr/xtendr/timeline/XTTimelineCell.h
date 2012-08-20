@@ -17,9 +17,6 @@ typedef void (^faceTapBlock)(Post  *post);
 @property(nonatomic, copy) faceTapBlock		faceTapBlock;
 @property(nonatomic, strong) Post			*post;
 
-+(CGFloat)cellHeightForText:(NSString*)text withUsername:(NSString*)username;
--(void)setPostText:(NSString*)postText username:(NSString*)username pictureURL:(NSURL*)picURL;
-
 +(CGFloat)cellHeightForPost:(Post*)post;
 -(void)setPost:(Post*)post;
 

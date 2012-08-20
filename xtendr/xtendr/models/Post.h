@@ -2,7 +2,7 @@
 //  Post.h
 //  xtendr
 //
-//  Created by Tony Million on 19/08/2012.
+//  Created by Tony Million on 20/08/2012.
 //  Copyright (c) 2012 Tony Million. All rights reserved.
 //
 
@@ -18,6 +18,7 @@
 @property (nonatomic, retain) id entities;
 @property (nonatomic, retain) NSString * html;
 @property (nonatomic, retain) NSString * id;
+@property (nonatomic, retain) NSNumber * intid;
 @property (nonatomic, retain) NSNumber * is_deleted;
 @property (nonatomic, retain) NSNumber * is_mention;
 @property (nonatomic, retain) NSNumber * is_mystream;
