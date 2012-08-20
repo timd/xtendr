@@ -12,6 +12,8 @@
 
 #import "XTHTTPClient.h"
 
+#import "XTProfileController.h"
+
 @interface XTNewPostViewController () <UITextViewDelegate>
 
 @property(strong) XTNewPostCell			*theCell;
@@ -72,8 +74,13 @@
 	if(self.replyToPost)
 	{
 		NSMutableString * startText = [[NSMutableString alloc] init];
-		for (XTMention * mention in self.replyToPost.mentions) {
 
+		[startText appendFormat:@"@%@ ", self.replyToPost.user.username];
+
+		for (XTMention * mention in self.replyToPost.mentions) {
+			if([mention.id isEqualToString:[XTProfileController sharedInstance].profileUser.id])
+				continue;
+			
 			[startText appendFormat:@"@%@ ", mention.name];
 		}
 
