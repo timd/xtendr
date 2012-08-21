@@ -18,12 +18,15 @@
 #import "XTAppDelegate.h"
 
 
+#define TEXT_LABEL_WIDTH	225.0
+
 @interface XTTimelineCell () <TTTAttributedLabelDelegate>
 
 @property(weak) IBOutlet UIImageView			*userPhoto;
 @property(weak) IBOutlet UIImageView			*thoughtBubbleBackImageView;
 @property(weak) IBOutlet TTTAttributedLabel		*thoughtLabel;
 @property(weak) IBOutlet UIButton				*quickReplyButton;
+@property(weak) IBOutlet UILabel				*timeAgoLabel;
 
 @property(assign) CGFloat						labelHeight;
 
@@ -104,7 +107,10 @@
     [super layoutSubviews];
 
 	self.thoughtBubbleBackImageView.frame = CGRectMake(45, 5, 263, self.labelHeight+15);
-	self.thoughtLabel.frame = CGRectMake(60, 10, 240, self.labelHeight);
+	self.thoughtLabel.frame = CGRectMake(60,
+										 10,
+										 TEXT_LABEL_WIDTH,
+										 self.labelHeight);
 
 	self.quickReplyButton.frame = CGRectMake(286-20, self.labelHeight-25, 40, 40);
 
@@ -113,7 +119,7 @@
 +(CGFloat)cellHeightForPost:(Post*)post
 {
 	CGFloat height = [[XTTimelineCell attributedStringForPost:post.text
-												  andUsername:post.user.username] heightForWidth:240.0];
+												  andUsername:post.user.username] heightForWidth:TEXT_LABEL_WIDTH];
 	return MAX(10+height+3+16+10, 60);
 }
 
@@ -125,11 +131,38 @@
 															   andUsername:_post.user.username];
 	self.thoughtLabel.text = attrText;
 
-	self.labelHeight = [attrText heightForWidth:240];
+	self.labelHeight = [attrText heightForWidth:TEXT_LABEL_WIDTH];
 
 	[self.userPhoto loadFromURL:_post.user.avatar.url
 			   placeholderImage:[UIImage imageNamed:@"unknown"]
 					  fromCache:[XTAppDelegate sharedInstance].userProfilePicCache];
+
+
+
+	NSTimeInterval numseconds = abs([post.created_at timeIntervalSinceNow]);
+    if(numseconds < 60*60) // 1 hour
+    {
+        int min = (int)numseconds/60;
+        if(min <= 3)
+        {
+            self.timeAgoLabel.text             = NSLocalizedString(@"now", @"");
+        }
+        else
+        {
+            self.timeAgoLabel.text             = [NSString stringWithFormat:NSLocalizedString(@"%dm", @""), MAX(1,(int)min)];
+        }
+    }
+    else if(numseconds < 60*60*24) // 1 day
+    {
+        int hour = (int)numseconds/60/60;
+        self.timeAgoLabel.text             = [NSString stringWithFormat:NSLocalizedString(@"%dh", @""), (int)hour];
+    }
+    else //if(numseconds < 60*60*24*4) // 1 week
+    {
+        int day = (int)numseconds/60/60/24;
+        self.timeAgoLabel.text             = [NSString stringWithFormat:NSLocalizedString(@"%dd", @""), (int)day];
+    }
+
 
 	[self layoutIfNeeded];
 }

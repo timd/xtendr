@@ -42,7 +42,9 @@
 	{
 		_addQueue = dispatch_queue_create("com.tonymillion.postaddqueue", DISPATCH_QUEUE_SERIAL);
 		self.ISO8601Formatter = [[NSDateFormatter alloc] init];
-		[self.ISO8601Formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];
+		[self.ISO8601Formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+		[self.ISO8601Formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+
 	}
 
 	return self;
@@ -110,8 +112,13 @@
 		}
 
 		if(!post.created_at)
-			post.created_at		= [self.ISO8601Formatter dateFromString:[postDict objectForKey:@"created_at"]];
+		{
+			NSString * createdatstring = [postDict objectForKey:@"created_at"];
 
+			post.created_at		= [self.ISO8601Formatter dateFromString:createdatstring];
+			DLog(@"created_at: %@ / %@", post.created_at, createdatstring);
+		}
+		
 		if([postDict objectForKey:@"text"])
 			post.text			= [postDict objectForKey:@"text"];
 		if([postDict objectForKey:@"html"])

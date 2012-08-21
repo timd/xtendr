@@ -58,8 +58,6 @@
     if (self) {
         // Custom initialization
 		self.title = NSLocalizedString(@"Timeline", @"");
-		self.tabBarItem.tag = TIMELINE_VIEW_TAG;
-
     }
     return self;
 }
@@ -573,14 +571,17 @@
 	if(_timelineMode == kMyTimelineMode)
 	{
 		self.title = NSLocalizedString(@"My Stream", @"");
+		self.tabBarItem.tag = MYSTREAM_TIMELINE_VIEW_TAG;
 	}
 	else if(_timelineMode == kGlobalTimelineMode)
 	{
 		self.title = NSLocalizedString(@"Global Stream", @"");
+		self.tabBarItem.tag = GLOBAL_TIMELINE_VIEW_TAG;
 	}
 	else if(_timelineMode == kMentionsTimelineMode)
 	{
 		self.title = NSLocalizedString(@"Mentions", @"");
+		self.tabBarItem.tag = MENTIONS_TIMELINE_VIEW_TAG;
 	}
 }
 

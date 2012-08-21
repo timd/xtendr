@@ -36,7 +36,9 @@ extern NSString *kANAPIClientID;
 
 #endif
 
-#define TIMELINE_VIEW_TAG		(0)
-#define PROFILE_VIEW_TAG		(1)
+#define GLOBAL_TIMELINE_VIEW_TAG		(0)
+#define MYSTREAM_TIMELINE_VIEW_TAG		(1)
+#define MENTIONS_TIMELINE_VIEW_TAG		(2)
+#define PROFILE_VIEW_TAG				(3)
 
 
