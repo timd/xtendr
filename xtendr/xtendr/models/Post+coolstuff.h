@@ -15,8 +15,10 @@
 +(Post*)postByID:(NSString*)id inContext:(NSManagedObjectContext*)context;
 +(Post*)postByID:(NSString*)id inContext:(NSManagedObjectContext*)context createIfNecessary:(BOOL)create;
 
--(NSDictionary*)entities;
++(NSUInteger)topPostID;
 
+-(NSDictionary*)entities;
 -(NSArray*)mentions;
+
 
 @end

@@ -103,7 +103,7 @@
 
 
 	self.addPostButton = [UIButton buttonWithType:UIButtonTypeCustom];
-	self.addPostButton.frame = CGRectMake(4,
+	self.addPostButton.frame = CGRectMake(3,
 										  self.view.bounds.size.height - 52,
 										  48,
 										  48);
@@ -128,8 +128,8 @@
 	[self.view addSubview:self.addPostOverlayImageView];
 	[self.view bringSubviewToFront:self.addPostOverlayImageView];
 
-	self.addPostOverlayImageView.frame = CGRectMake(4,
-													self.view.bounds.size.height - 54,
+	self.addPostOverlayImageView.frame = CGRectMake(3,
+													self.view.bounds.size.height - 53,
 													48,
 													48);
 

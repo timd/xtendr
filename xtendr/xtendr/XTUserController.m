@@ -108,34 +108,33 @@
 	{
 		user.you_muted		= [userDict objectForKey:@"you_muted"];
 	}
-
-
+	
 	NSDictionary * counts = [userDict objectForKey:@"counts"];
 	if(counts)
 	{
-		if(user.follows)
+		if(user.followers)
 		{
-			if([user.follows isEqual:[counts objectForKey:@"follows"]])
-				user.follows		= [counts objectForKey:@"follows"];
+			if(![user.followers isEqual:[counts objectForKey:@"followers"]])
+				user.followers		= [counts objectForKey:@"followers"];
 		}
 		else
 		{
-			user.follows		= [counts objectForKey:@"follows"];
+			user.followers		= [counts objectForKey:@"followers"];
 		}
 
-		if(user.followed_by)
+		if(user.following)
 		{
-			if([user.followed_by isEqual:[counts objectForKey:@"followed_by"]])
-				user.followed_by		= [counts objectForKey:@"followed_by"];
+			if(![user.following isEqual:[counts objectForKey:@"following"]])
+				user.following		= [counts objectForKey:@"following"];
 		}
 		else
 		{
-			user.followed_by		= [counts objectForKey:@"followed_by"];
+			user.following		= [counts objectForKey:@"following"];
 		}
 
 		if(user.postcount)
 		{
-			if([user.postcount isEqual:[counts objectForKey:@"posts"]])
+			if(![user.postcount isEqual:[counts objectForKey:@"posts"]])
 				user.postcount		= [counts objectForKey:@"posts"];
 		}
 		else

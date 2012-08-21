@@ -30,6 +30,8 @@
 
 #import "TMImgurUploader.h"
 
+#import "NAEffectsManager.h"
+
 
 NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 
@@ -116,6 +118,10 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 													  [self configureAppState];
 												  }];
 
+	dispatch_async(dispatch_get_global_queue(0, 0), ^{
+		[[NAEffectsManager sharedInstance] generateThumbnailsFromImage:[UIImage imageNamed:@"thumbnail.jpg"]];
+	});
+
 
     return YES;
 }
@@ -130,6 +136,11 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 {
 	// Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
 	// If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+
+	[self.userCoverArtCache trimCache];
+	[self.userProfilePicCache trimCache];
+
+	//TODO: trim core data stuff
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application

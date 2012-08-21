@@ -21,6 +21,8 @@
 
 #import "XTNewPostViewController.h"
 
+#import "XTProfileController.h"
+
 @interface XTProfileViewController () <NSFetchedResultsControllerDelegate>
 
 @property(weak) IBOutlet UIView			*headerView;
@@ -28,6 +30,11 @@
 @property(weak) IBOutlet UIImageView	*userImageView;
 @property(weak) IBOutlet UILabel		*userNameLabel;
 @property(weak) IBOutlet UILabel		*userPostCountLabel;
+@property(weak) IBOutlet UILabel		*followersLabel;
+@property(weak) IBOutlet UILabel		*followingLabel;
+
+@property(weak) IBOutlet UIButton				*followUnfollowButton;
+@property(weak) IBOutlet UIButton				*muteUnmuteButton;
 
 @property(copy) NSString						*internalUserID;
 @property(strong) NSFetchedResultsController	*userfetchedResultsController;
@@ -41,7 +48,7 @@
 -(void)setupHeader
 {
 	DLog(@"set up header");
-	
+
 	User * tempUser;
 
 	if(self.userfetchedResultsController.fetchedObjects.count)
@@ -66,6 +73,41 @@
 					   placeholderImage:[UIImage imageNamed:@"brownlinen"]
 							  fromCache:(TMDiskCache*)[XTAppDelegate sharedInstance].userProfilePicCache];
 	}
+
+	if([tempUser.you_follow boolValue])
+	{
+		[self.followUnfollowButton setTitle:NSLocalizedString(@"Unfollow", @"")
+								   forState:UIControlStateNormal];
+	}
+	else
+	{
+		[self.followUnfollowButton setTitle:NSLocalizedString(@"Follow", @"")
+								   forState:UIControlStateNormal];
+	}
+
+	if([tempUser.you_muted boolValue])
+	{
+		[self.muteUnmuteButton setTitle:NSLocalizedString(@"Unmute", @"")
+							   forState:UIControlStateNormal];
+	}
+	else
+	{
+		[self.muteUnmuteButton setTitle:NSLocalizedString(@"mute", @"")
+							   forState:UIControlStateNormal];
+	}
+
+	if([[XTProfileController sharedInstance].profileUser.id isEqual:tempUser.id])
+	{
+		//THIS IS US!!!
+		self.followUnfollowButton.hidden = YES;
+	}
+	else
+	{
+		self.followUnfollowButton.hidden = NO;
+	}
+
+	self.followersLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Followers: %d", @""), [tempUser.followers integerValue]];
+	self.followingLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Following: %d", @""), [tempUser.following integerValue]];
 }
 
 -(id)initWithUserID:(NSString*)userid
@@ -131,9 +173,9 @@
 
     // Create and initialize the fetchedResultsController.
     self.userfetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                        managedObjectContext:[XTAppDelegate sharedInstance].managedObjectContext
-                                                                          sectionNameKeyPath:nil /* one section */
-                                                                                   cacheName:nil];
+																			managedObjectContext:[XTAppDelegate sharedInstance].managedObjectContext
+																			  sectionNameKeyPath:nil /* one section */
+																					   cacheName:nil];
 
     self.userfetchedResultsController.delegate = self;
 
@@ -257,7 +299,7 @@
 
 		CGRect rect = self.headerView.frame;
 		rect.origin.y = MIN(0, scrollView.contentOffset.y);
-		rect.size.height = 200 + extra;
+		rect.size.height = 220 + extra;
 		self.headerView.frame = rect;
 	}
 }
@@ -321,7 +363,7 @@
 	}
 	else
 	{
-		
+
 	}
 }
 
@@ -392,6 +434,55 @@
     }
 }
 
+-(IBAction)followUnfollow:(id)sender
+{
+	User * tempUser;
 
+	if(!self.userfetchedResultsController.fetchedObjects.count)
+		return;
+
+	tempUser = [self.userfetchedResultsController.fetchedObjects lastObject];
+
+	self.followUnfollowButton.enabled = NO;
+
+	if([tempUser.you_follow boolValue])
+	{
+		//DO DELETE FOLLOW
+		[[XTHTTPClient sharedClient] deletePath:[NSString stringWithFormat:@"users/%@/follow", self.internalUserID]
+									 parameters:nil
+										success:^(TMHTTPRequest *operation, id responseObject) {
+											DLog(@"UNFOLLOW SUCCESS: %@", responseObject);
+
+											if(responseObject && [responseObject isKindOfClass:[NSDictionary class]])
+											{
+												[[XTUserController sharedInstance] addUser:responseObject];
+											}
+
+											self.followUnfollowButton.enabled = YES;
+										}
+										failure:^(TMHTTPRequest *operation, NSError *error) {
+											self.followUnfollowButton.enabled = YES;
+										}];
+	}
+	else
+	{
+		//DO POST FOLLOW
+
+		[[XTHTTPClient sharedClient] postPath:[NSString stringWithFormat:@"users/%@/follow", self.internalUserID]
+								   parameters:nil
+									  success:^(TMHTTPRequest *operation, id responseObject) {
+										  DLog(@"FOLLOW SUCCESS: %@", responseObject);
+
+										  if(responseObject && [responseObject isKindOfClass:[NSDictionary class]])
+										  {
+											  [[XTUserController sharedInstance] addUser:responseObject];
+										  }
+										  self.followUnfollowButton.enabled = YES;
+									  }
+									  failure:^(TMHTTPRequest *operation, NSError *error) {										  
+										  self.followUnfollowButton.enabled = YES;
+									  }];
+	}
+}
 
 @end
