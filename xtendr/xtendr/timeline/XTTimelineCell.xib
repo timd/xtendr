@@ -161,7 +161,7 @@
 							<object class="IBUILabel" id="819671229">
 								<reference key="NSNextResponder" ref="848408789"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{285, 6}, {20, 13}}</string>
+								<string key="NSFrame">{{283, 6}, {22, 13}}</string>
 								<reference key="NSSuperview" ref="848408789"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="159998721"/>
@@ -186,16 +186,17 @@
 								<float key="IBUIMinimumFontSize">10</float>
 								<int key="IBUITextAlignment">2</int>
 								<object class="IBUIFontDescription" key="IBUIFontDescription">
-									<string key="name">HelveticaNeue</string>
+									<string key="name">HelveticaNeue-Light</string>
 									<string key="family">Helvetica Neue</string>
 									<int key="traits">0</int>
-									<double key="pointSize">17</double>
+									<double key="pointSize">10</double>
 								</object>
 								<object class="NSFont" key="IBUIFont">
 									<string key="NSName">HelveticaNeue-Medium</string>
-									<double key="NSSize">17</double>
+									<double key="NSSize">10</double>
 									<int key="NSfFlags">16</int>
 								</object>
+								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
 							</object>
 						</array>
 						<string key="NSFrameSize">{320, 79}</string>

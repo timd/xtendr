@@ -28,6 +28,8 @@
 #import "XTSettingsViewController.h"
 #import "XTFeedbackViewController.h"
 
+#import "TMImgurUploader.h"
+
 
 NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 
@@ -64,6 +66,8 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 	// primes the profile!
 	[self managedObjectContext];
 	[XTProfileController sharedInstance];
+
+	[TMImgurUploader sharedInstance].APIKey = @"dda44bbcc35afffc3419cb5ca961ca94";
 
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(syncDidSave:)

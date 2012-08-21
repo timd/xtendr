@@ -67,8 +67,10 @@
 		// which will lock up the UI now and again!
 		//DLog(@"Merge post");
 		if(!post.thread_id)
+		{
 			post.thread_id		= [postDict objectForKey:@"thread_id"];
-
+		}
+		
 		if(post.num_replies && [postDict objectForKey:@"num_replies"])
 		{
 			if(![post.num_replies isEqual:[postDict objectForKey:@"num_replies"]])
@@ -114,9 +116,7 @@
 		if(!post.created_at)
 		{
 			NSString * createdatstring = [postDict objectForKey:@"created_at"];
-
 			post.created_at		= [self.ISO8601Formatter dateFromString:createdatstring];
-			DLog(@"created_at: %@ / %@", post.created_at, createdatstring);
 		}
 		
 		if([postDict objectForKey:@"text"])
@@ -144,11 +144,15 @@
 
 		if(!post.thread_id)
 			post.thread_id		= [postDict objectForKey:@"thread_id"];
+
+		//END OF CREATE
 	}
+	
 
 	if([postDict objectForKey:@"is_deleted"])
 	{
-		post.is_deleted		= [postDict objectForKey:@"is_deleted"];
+		if(![post.is_deleted isEqual:[postDict objectForKey:@"is_deleted"]])
+			post.is_deleted		= [postDict objectForKey:@"is_deleted"];
 	}
 	else
 	{
