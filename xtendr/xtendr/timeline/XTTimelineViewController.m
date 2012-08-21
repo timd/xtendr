@@ -42,8 +42,11 @@
 @property(strong)	NSString					*firstID;
 @property(strong)	NSString					*lastID;
 @property(assign)	NSUInteger					lastLoadCount;
+@property(assign)	BOOL						doneInitialLoad;
 
 @property(strong)	NSFetchedResultsController	*fetchedResultsController;
+
+@property(strong) NSIndexPath					*indexPathAtTopForUpdate;
 
 @end
 
@@ -163,6 +166,7 @@
     [fetchRequest setPredicate:predicate];
 
 	[fetchRequest setFetchLimit:100];
+	[fetchRequest setFetchBatchSize:100];
 
     // Create and initialize the fetchedResultsController.
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
@@ -196,14 +200,18 @@
 {
 	[super viewWillAppear:animated];
 
-	[self loadPosts];
-
+	if(!self.doneInitialLoad)
+	{
+		[self loadPosts];
+	}
+	else
+	{
+		[self loadNewerPosts];
+	}
+	
 	[self.headerBackgroundView loadFromURL:[XTProfileController sharedInstance].profileUser.cover_image.url
 						  placeholderImage:nil
 								 fromCache:[XTAppDelegate sharedInstance].userCoverArtCache];
-
-	[self.tableView reloadData];
-
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -221,8 +229,6 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController.sections objectAtIndex:section];
-
-	DLog(@"mode: %d, [sectionInfo numberOfObjects] = %d", self.timelineMode, [sectionInfo numberOfObjects]);
 
 	return [sectionInfo numberOfObjects];
 }
@@ -306,11 +312,11 @@
 	DLog(@"loadPosts");
 
 	NSMutableDictionary * params = [NSMutableDictionary dictionaryWithCapacity:2];
-	if(self.firstID)
-	{
-		[params setObject:self.firstID
-				   forKey:@"since_id"];
-	}
+	//if(self.firstID)
+	//{
+	//	[params setObject:self.firstID
+	//			   forKey:@"since_id"];
+	//}
 
 	[params setObject:[NSNumber numberWithUnsignedInteger:100]
 			   forKey:@"count"];
@@ -357,7 +363,7 @@
 
 											 self.lastLoadCount = temp.count;
 
-											 [self doTestFetch];
+											 self.doneInitialLoad = YES;
 										 }
 										 else
 										 {
@@ -412,7 +418,78 @@
 
 -(void)loadNewerPosts
 {
-	
+	if(self.loadRequest)
+	{
+		DLog(@"load already in progress!");
+		return;
+	}
+
+	DLog(@"loadNewerPosts");
+
+	NSMutableDictionary * params = [NSMutableDictionary dictionaryWithCapacity:2];
+	if(self.firstID)
+	{
+		[params setObject:self.firstID
+				   forKey:@"since_id"];
+	}
+
+	[params setObject:[NSNumber numberWithUnsignedInteger:100]
+			   forKey:@"count"];
+
+	DLog(@"params = %@", params);
+
+	NSString * path;
+	if(self.timelineMode == kMyTimelineMode)
+	{
+		path = @"posts/stream";
+	}
+	else if(self.timelineMode == kGlobalTimelineMode)
+	{
+		path = @"posts/stream/global";
+	}
+	else if(self.timelineMode == kMentionsTimelineMode)
+	{
+		path = @"users/me/mentions";
+	}
+
+	[self.headerActivityIndicator startAnimating];
+	self.lastRefreshLabel.text = NSLocalizedString(@"Refresh In Progress", @"");
+
+	self.loadRequest = [[XTHTTPClient sharedClient] getPath:path
+												 parameters:params
+													success:^(TMHTTPRequest *operation, id responseObject) {
+														self.loadRequest = nil;
+														[self.headerActivityIndicator stopAnimating];
+														//DLog(@"login S: %@", responseObject);
+														if(responseObject && [responseObject isKindOfClass:[NSArray class]])
+														{
+															NSArray * temp = responseObject;
+															if(temp.count)
+															{
+																DLog(@"Got %d posts", temp.count);
+																[[XTPostController sharedInstance] addPostArray:temp
+																								   fromMyStream:self.timelineMode == kMyTimelineMode
+																								   fromMentions:self.timelineMode == kMentionsTimelineMode];
+
+																self.firstID	= [[temp objectAtIndex:0] objectForKey:@"id"];
+
+																self.lastLoadCount += temp.count;
+															}
+															else
+															{
+																DLog(@"Nothing new");
+															}
+
+															self.lastRefreshLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Last Refresh: %@", @""), [NSDateFormatter localizedStringFromDate:[NSDate date] dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle]];
+															
+														}
+													}
+													failure:^(TMHTTPRequest *operation, NSError *error) {
+														self.loadRequest = nil;
+														[self.headerActivityIndicator stopAnimating];
+														
+														DLog(@"login F: %@", operation.responseString);
+													}];
 }
 
 -(void)loadMorePosts
@@ -440,7 +517,7 @@
 				   forKey:@"before_id"];
 	}
 
-	[params setObject:[NSNumber numberWithBool:100]
+	[params setObject:[NSNumber numberWithUnsignedInteger:100]
 			   forKey:@"count"];
 
 	NSString * path;
@@ -525,7 +602,7 @@
 
 	if(self.refreshOnRelease)
 	{
-		[self loadPosts];
+		[self loadNewerPosts];
 	}
 
 	self.refreshOnRelease = NO;
@@ -591,11 +668,25 @@
 
 #pragma mark - fetched results stuff
 
+
+
+
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
     //Lets the tableview know we're potentially doing a bunch of updates.
 	DLog(@"controllerWillChangeContent");
-    //[self.tableView beginUpdates];
+	//[self.tableView beginUpdates];
+
+	CGPoint oldOffset = self.tableView.contentOffset;
+	oldOffset.y -= self.headerView.bounds.size.height;
+	DLog(@"oldOffset = %@", NSStringFromCGPoint(oldOffset));
+
+	self.indexPathAtTopForUpdate = [self.tableView indexPathForRowAtPoint:oldOffset];
+
+	if(!self.indexPathAtTopForUpdate)
+		self.indexPathAtTopForUpdate = [NSIndexPath indexPathForRow:0 inSection:0];
+
+	DLog(@"path = %@", self.indexPathAtTopForUpdate);
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
@@ -603,6 +694,7 @@
     //We're finished updating the tableview's data.
 	DLog(@"controllerDidChangeContent");
     //[self.tableView endUpdates];
+
 	[self.tableView reloadData];
 }
 
@@ -612,30 +704,36 @@
      forChangeType:(NSFetchedResultsChangeType)type
       newIndexPath:(NSIndexPath *)newIndexPath
 {
-/*
     UITableView *tableView = self.tableView;
     switch(type)
     {
         case NSFetchedResultsChangeInsert:
-            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
-                             withRowAnimation:UITableViewRowAnimationNone];
+			if ([newIndexPath compare:self.indexPathAtTopForUpdate] == NSOrderedDescending ) {
+				// this is BELOW!
+				DLog(@"Below: %@", newIndexPath);
+			}
+			else
+			{
+				DLog(@"Above: %@", newIndexPath);
+			}
+            //[tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+            //                 withRowAnimation:UITableViewRowAnimationNone];
             break;
 
         case NSFetchedResultsChangeDelete:
-            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
-                             withRowAnimation:UITableViewRowAnimationAutomatic];
+            //[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+            //                 withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
 
         case NSFetchedResultsChangeUpdate:
-            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
-                             withRowAnimation:UITableViewRowAnimationAutomatic];
+            //[tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+            //                 withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
 
         case NSFetchedResultsChangeMove:
-			[tableView moveRowAtIndexPath:indexPath toIndexPath:newIndexPath];
+			//[tableView moveRowAtIndexPath:indexPath toIndexPath:newIndexPath];
             break;
     }
- */
 }
 
 - (void)controller:(NSFetchedResultsController *)controller
@@ -655,60 +753,6 @@
                           withRowAnimation:UITableViewRowAnimationFade];
             break;
     }
-}
-
--(void)doTestFetch
-{
-	return;
-	
-	if(self.timelineMode != kGlobalTimelineMode)
-		return;
-
-	// Create and configure a fetch request.
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Post"
-                                              inManagedObjectContext:[XTAppDelegate sharedInstance].managedObjectContext];
-
-    [fetchRequest setEntity:entity];
-
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"intid" ascending:NO];
-    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
-    [fetchRequest setSortDescriptors:sortDescriptors];
-
-	// limit to those entities that belong to the particular item
-	// TODO: FIX THIS THIS
-	/*
-    NSPredicate *predicate;
-
-	if(self.timelineMode == kGlobalTimelineMode)
-	{
-		predicate = [NSPredicate predicateWithFormat:@"is_deleted == %@", [NSNumber numberWithBool:NO]];
-	}
-	else if(self.timelineMode == kMyTimelineMode)
-	{
-		predicate = [NSPredicate predicateWithFormat:@"is_deleted == %@ AND is_mystream == %@", [NSNumber numberWithBool:NO], [NSNumber numberWithBool:YES]];
-	}
-	else if(self.timelineMode == kMentionsTimelineMode)
-	{
-		predicate = [NSPredicate predicateWithFormat:@"is_deleted == %@ AND is_mention == %@", [NSNumber numberWithBool:NO], [NSNumber numberWithBool:YES]];
-	}
-
-	DLog(@"predicate: %@", predicate);
-	 [fetchRequest setPredicate:predicate];
-	 */
-
-
-	[fetchRequest setFetchLimit:10];
-
-	NSError * err;
-	NSArray * objects = [[XTAppDelegate sharedInstance].managedObjectContext executeFetchRequest:fetchRequest
-																						   error:&err];
-
-
-	for (Post * post in objects) {
-		DLog(@"%@: %@", post.id, post.text);
-	}
 }
 
 @end
