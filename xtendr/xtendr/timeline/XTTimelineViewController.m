@@ -23,6 +23,8 @@
 
 #import "XTPhotoPostController.h"
 
+#define POST_LIMIT	20
+
 @interface XTTimelineViewController () <ExpandableNavigationDelegate, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
 
 @property(weak)	IBOutlet UIView					*headerView;
@@ -187,8 +189,8 @@
 
     [fetchRequest setPredicate:predicate];
 
-	[fetchRequest setFetchLimit:100];
-	[fetchRequest setFetchBatchSize:100];
+	[fetchRequest setFetchLimit:POST_LIMIT];
+	[fetchRequest setFetchBatchSize:POST_LIMIT];
 
     // Create and initialize the fetchedResultsController.
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
@@ -340,7 +342,7 @@
 	//			   forKey:@"since_id"];
 	//}
 
-	[params setObject:[NSNumber numberWithUnsignedInteger:100]
+	[params setObject:[NSNumber numberWithUnsignedInteger:POST_LIMIT]
 			   forKey:@"count"];
 
 	DLog(@"params = %@", params);
@@ -456,7 +458,7 @@
 				   forKey:@"since_id"];
 	}
 
-	[params setObject:[NSNumber numberWithUnsignedInteger:100]
+	[params setObject:[NSNumber numberWithUnsignedInteger:POST_LIMIT]
 			   forKey:@"count"];
 
 	DLog(@"params = %@", params);
@@ -541,7 +543,7 @@
 				   forKey:@"before_id"];
 	}
 
-	[params setObject:[NSNumber numberWithUnsignedInteger:100]
+	[params setObject:[NSNumber numberWithUnsignedInteger:POST_LIMIT]
 			   forKey:@"count"];
 
 	NSString * path;

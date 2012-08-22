@@ -220,10 +220,30 @@
 	});
 }
 
+//publically accessable functions
+-(void)addUsersFromArray:(NSArray*)userDictArray completion:(void (^)(void))completion
+{
+	if(userDictArray.count == 0)
+		return;
+
+	dispatch_async(_addQueue, ^{
+		[self backgroundAddUserArray:userDictArray];
+		dispatch_async(dispatch_get_main_queue(), completion);
+	});
+}
+
 -(void)addUser:(NSDictionary*)userDict
 {
 	dispatch_async(_addQueue, ^{
 		[self backgroundAddUser:userDict];
+	});
+}
+
+-(void)addUser:(NSDictionary*)userDict  completion:(void (^)(void))completion
+{
+	dispatch_async(_addQueue, ^{
+		[self backgroundAddUser:userDict];
+		dispatch_async(dispatch_get_main_queue(), completion);
 	});
 }
 

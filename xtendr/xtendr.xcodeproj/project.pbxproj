@@ -66,6 +66,9 @@
 		5D8E636E15E00F3600DC11FF /* TMHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D8E636D15E00F3600DC11FF /* TMHTTPRequest.m */; };
 		5D8E637115E0139D00DC11FF /* TMNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D8E637015E0139D00DC11FF /* TMNetworkActivityIndicatorManager.m */; };
 		5D8E637415E01BB500DC11FF /* XTHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D8E637315E01BB500DC11FF /* XTHTTPClient.m */; };
+		5DA766A815E40A4400CF69FA /* XTSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DA766A715E40A4400CF69FA /* XTSearchViewController.m */; };
+		5DA766AB15E43E9200CF69FA /* XTHashTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DA766AA15E43E9200CF69FA /* XTHashTag.m */; };
+		5DA766AF15E4414100CF69FA /* XTHashTagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DA766AE15E4414100CF69FA /* XTHashTagViewController.m */; };
 		5DC2585E15E0DD94007F6EEE /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DC2585D15E0DD94007F6EEE /* Icon@2x.png */; };
 		5DC2586015E0DD9A007F6EEE /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DC2585F15E0DD9A007F6EEE /* Icon.png */; };
 		5DC2586215E0DDC1007F6EEE /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DC2586115E0DDC1007F6EEE /* Default@2x.png */; };
@@ -235,6 +238,12 @@
 		5D8E637015E0139D00DC11FF /* TMNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMNetworkActivityIndicatorManager.m; sourceTree = "<group>"; };
 		5D8E637215E01BB500DC11FF /* XTHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTHTTPClient.h; sourceTree = "<group>"; };
 		5D8E637315E01BB500DC11FF /* XTHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTHTTPClient.m; sourceTree = "<group>"; };
+		5DA766A615E40A4400CF69FA /* XTSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTSearchViewController.h; sourceTree = "<group>"; };
+		5DA766A715E40A4400CF69FA /* XTSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTSearchViewController.m; sourceTree = "<group>"; };
+		5DA766A915E43E9200CF69FA /* XTHashTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTHashTag.h; sourceTree = "<group>"; };
+		5DA766AA15E43E9200CF69FA /* XTHashTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTHashTag.m; sourceTree = "<group>"; };
+		5DA766AD15E4414100CF69FA /* XTHashTagViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTHashTagViewController.h; sourceTree = "<group>"; };
+		5DA766AE15E4414100CF69FA /* XTHashTagViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTHashTagViewController.m; sourceTree = "<group>"; };
 		5DC2585D15E0DD94007F6EEE /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		5DC2585F15E0DD9A007F6EEE /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		5DC2586115E0DDC1007F6EEE /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
@@ -417,6 +426,7 @@
 		5D8AFF9715DFBA39004241D5 /* xtendr */ = {
 			isa = PBXGroup;
 			children = (
+				5DA766A515E40A2E00CF69FA /* search */,
 				5DF0AF3415E2A9490093C081 /* feedback */,
 				5DF0AEF915E14F130093C081 /* settings */,
 				5DC2586515E0EC66007F6EEE /* models */,
@@ -429,6 +439,7 @@
 				5D8AFF9815DFBA39004241D5 /* Supporting Files */,
 				5D8AFFE215DFD783004241D5 /* timeline */,
 				5D8E635815DFF58500DC11FF /* userprofile */,
+				5DA766AC15E4412900CF69FA /* hashtagview */,
 				5D8AFFA015DFBA39004241D5 /* XTAppDelegate.h */,
 				5D8AFFA115DFBA39004241D5 /* XTAppDelegate.m */,
 				5D8AFFA315DFBA39004241D5 /* xtendr.xcdatamodeld */,
@@ -609,6 +620,24 @@
 			path = TMHTTPClient;
 			sourceTree = "<group>";
 		};
+		5DA766A515E40A2E00CF69FA /* search */ = {
+			isa = PBXGroup;
+			children = (
+				5DA766A615E40A4400CF69FA /* XTSearchViewController.h */,
+				5DA766A715E40A4400CF69FA /* XTSearchViewController.m */,
+			);
+			path = search;
+			sourceTree = "<group>";
+		};
+		5DA766AC15E4412900CF69FA /* hashtagview */ = {
+			isa = PBXGroup;
+			children = (
+				5DA766AD15E4414100CF69FA /* XTHashTagViewController.h */,
+				5DA766AE15E4414100CF69FA /* XTHashTagViewController.m */,
+			);
+			path = hashtagview;
+			sourceTree = "<group>";
+		};
 		5DC2586515E0EC66007F6EEE /* models */ = {
 			isa = PBXGroup;
 			children = (
@@ -626,6 +655,8 @@
 				5DC2586715E0EC78007F6EEE /* XTProfileUser.m */,
 				5DF0AF1115E288300093C081 /* XTMention.h */,
 				5DF0AF1215E288300093C081 /* XTMention.m */,
+				5DA766A915E43E9200CF69FA /* XTHashTag.h */,
+				5DA766AA15E43E9200CF69FA /* XTHashTag.m */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -925,6 +956,9 @@
 				5DF0AFB315E39CDC0093C081 /* ExpandableNavigation.m in Sources */,
 				5DF0AFB615E39D0E0093C081 /* TMMaskView.m in Sources */,
 				5DF0AFB915E39DBB0093C081 /* XTPhotoPostController.m in Sources */,
+				5DA766A815E40A4400CF69FA /* XTSearchViewController.m in Sources */,
+				5DA766AB15E43E9200CF69FA /* XTHashTag.m in Sources */,
+				5DA766AF15E4414100CF69FA /* XTHashTagViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

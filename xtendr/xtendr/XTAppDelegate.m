@@ -27,11 +27,14 @@
 
 #import "XTSettingsViewController.h"
 #import "XTFeedbackViewController.h"
+#import "XTSearchViewController.h"
 
 #import "TMImgurUploader.h"
-
 #import "NAEffectsManager.h"
 
+#import "XTHashTagViewController.h"
+
+#import "XTNewPostViewController.h"
 
 NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 
@@ -44,6 +47,8 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 @property(strong) XTTimelineViewController		*myTimelineController;
 @property(strong) XTTimelineViewController		*globalTimelineController;
 @property(strong) XTTimelineViewController		*mentionsTimelineController;
+
+@property(strong) XTSearchViewController		*searchViewController;
 
 @end
 
@@ -134,7 +139,7 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-	// Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
+	// Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
 	// If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 
 	[self.userCoverArtCache trimCache];
@@ -161,7 +166,7 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 
 -(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
-	DLog(@"openURL: %@", url);
+	DLog(@"openURL: %@, host:%@", url, url.host);
 
 	//This handles login - it *should* work across in-app AND external safari!
 	if([url.host isEqualToString:@"authcomplete"])
@@ -179,6 +184,41 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 			[[XTProfileController sharedInstance] loginWithToken:[parameters objectForKey:@"access_token"]];
         }
 	}
+	else if([url.host isEqualToString:@"showuser"])
+	{
+		DLog(@"SHOWUSER: %@", url.path);
+
+		NSString *userID = [url.path substringFromIndex:1];
+		XTProfileViewController * pvc = [[XTProfileViewController alloc] initWithUserID:userID];
+
+		UINavigationController * temp = (UINavigationController*)self.viewDeck.centerController;
+
+		[temp pushViewController:pvc
+						animated:YES];
+	}
+	else if([url.host isEqualToString:@"showhashtag"])
+	{
+		DLog(@"showhashtag: %@", url.path);
+
+		NSString *hashtag = [url.path substringFromIndex:1];
+
+		XTHashTagViewController * htvc = [[XTHashTagViewController alloc] initWithHashtag:hashtag];
+
+		UINavigationController * temp = (UINavigationController*)self.viewDeck.centerController;
+
+		[temp pushViewController:htvc
+						animated:YES];
+	}
+	else if([url.host isEqualToString:@"newpost"])
+	{
+		XTNewPostViewController * npvc = [[XTNewPostViewController alloc] init];
+
+		[self.viewDeck.centerController presentViewController:[[UINavigationController alloc] initWithRootViewController:npvc]
+													 animated:YES
+												   completion:nil];
+
+	}
+
 
 	return YES;
 }
@@ -261,13 +301,21 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 	[self switchToViewController:self.mentionsTimelineController];
 }
 
-
-
 -(void)switchToProfileView
 {
 	XTProfileViewController * pvc = [[XTProfileViewController alloc] initWithUserID:[XTProfileController sharedInstance].profileUser.id];
 
 	[self switchToViewController:pvc];
+}
+
+-(void)switchToSearchController
+{
+	if(!self.searchViewController)
+	{
+		self.searchViewController = [[XTSearchViewController alloc] init];
+	}
+
+	[self switchToViewController:self.searchViewController];
 }
 
 -(void)switchToSettingsView
@@ -288,7 +336,7 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 -(void)logout
 {
 	[[XTProfileController sharedInstance] logout];
-	
+
 	self.myTimelineController		= nil;
 	self.globalTimelineController	= nil;
 	self.mentionsTimelineController = nil;
@@ -333,11 +381,11 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
     if (managedObjectContext != nil) {
         if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
-             // Replace this implementation with code to handle the error appropriately.
-             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
+			// Replace this implementation with code to handle the error appropriately.
+			// abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
-        } 
+        }
     }
 }
 
@@ -350,7 +398,7 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
     if (_managedObjectContext != nil) {
         return _managedObjectContext;
     }
-    
+
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if (coordinator != nil) {
         _managedObjectContext = [[NSManagedObjectContext alloc] init];
@@ -407,9 +455,9 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
     if (_persistentStoreCoordinator != nil) {
         return _persistentStoreCoordinator;
     }
-    
+
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"xtendr.sqlite"];
-    
+
     NSError *error = nil;
 
 again:
@@ -419,7 +467,7 @@ again:
                                                    configuration:nil
                                                              URL:storeURL
                                                          options:@{	NSInferMappingModelAutomaticallyOption : [NSNumber numberWithBool:YES],
-																	NSMigratePersistentStoresAutomaticallyOption : [NSNumber numberWithBool:YES]}
+				   NSMigratePersistentStoresAutomaticallyOption : [NSNumber numberWithBool:YES]}
 														   error:&error])
     {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);

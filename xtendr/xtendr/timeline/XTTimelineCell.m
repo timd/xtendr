@@ -129,6 +129,20 @@
 															   andUsername:_post.user.username];
 	self.thoughtLabel.text = attrText;
 
+
+
+	for (XTMention * mention in _post.mentions) {
+		[self.thoughtLabel addLinkToURL:[NSURL URLWithString:[NSString stringWithFormat:@"xtendr://showuser/%@", mention.id]]
+							  withRange:mention.range];
+	}
+
+	for (XTHashTag * hashtag in _post.hashtags) {
+		[self.thoughtLabel addLinkToURL:[NSURL URLWithString:[NSString stringWithFormat:@"xtendr://showhashtag/%@", hashtag.name]]
+							  withRange:hashtag.range];
+	}
+
+
+
 	self.labelHeight = [attrText heightForWidth:TEXT_LABEL_WIDTH]+2;
 
 	//self.usernameLabel.text = [NSString stringWithFormat:@"@%@", _post.user.username];

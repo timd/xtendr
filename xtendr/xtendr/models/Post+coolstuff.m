@@ -66,6 +66,19 @@
 	return mentions;
 }
 
+-(NSArray*)hashtags
+{
+	NSDictionary * entities = self.entities_dict;
+	NSMutableArray *hashtags = [NSMutableArray arrayWithCapacity:4];
+
+	for (NSDictionary * mentionDict in [entities objectForKey:@"hashtags"]) {
+		XTHashTag * hashtag = [[XTHashTag alloc] initWithAttributes:mentionDict];
+		[hashtags addObject:hashtag];
+	}
+
+	return hashtags;
+}
+
 +(NSUInteger)topPostID
 {
 	NSUInteger returnval = -1;

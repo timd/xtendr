@@ -9,6 +9,7 @@
 #import "Post.h"
 
 #import	"XTMention.h"
+#import	"XTHashtag.h"
 
 @interface Post (coolstuff)
 
@@ -18,7 +19,8 @@
 +(NSUInteger)topPostID;
 
 -(NSDictionary*)entities;
--(NSArray*)mentions;
 
+-(NSArray*)mentions;
+-(NSArray*)hashtags;
 
 @end
