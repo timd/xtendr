@@ -78,6 +78,39 @@
 		}
 	}
 
+	NSDictionary * description = [userDict objectForKey:@"description"];
+	if(description)
+	{
+		if([description objectForKey:@"text"])
+		{
+			if(user.desc_text)
+			{
+				// merge it
+				if(![user.desc_text isEqual:[description objectForKey:@"text"]])
+					user.desc_text = [description objectForKey:@"text"];
+			}
+			else
+			{
+				user.desc_text = [description objectForKey:@"text"];
+			}
+		}
+
+		if([description objectForKey:@"html"])
+		{
+			if(user.desc_html)
+			{
+				// merge it
+				if(![user.desc_html isEqual:[description objectForKey:@"html"]])
+					user.desc_html = [description objectForKey:@"html"];
+			}
+			else
+			{
+				user.desc_html = [description objectForKey:@"html"];
+			}
+		}
+	}
+
+
 	// this can merge
 	if(user.follows_you)
 	{

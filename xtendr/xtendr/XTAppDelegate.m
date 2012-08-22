@@ -145,7 +145,7 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 	[self.userProfilePicCache trimCache];
 
 	//TODO: trim core data stuff
-	[self.managedObjectContext reset];
+	//[self.managedObjectContext reset];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application

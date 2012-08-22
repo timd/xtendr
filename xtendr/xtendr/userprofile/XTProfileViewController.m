@@ -23,6 +23,9 @@
 
 #import "XTProfileController.h"
 
+#import "XTProfileBioCell.h"
+#import "XTProfileFollowCell.h"
+
 @interface XTProfileViewController () <NSFetchedResultsControllerDelegate>
 
 @property(weak) IBOutlet UIView			*headerView;
@@ -32,6 +35,7 @@
 @property(weak) IBOutlet UILabel		*userPostCountLabel;
 @property(weak) IBOutlet UILabel		*followersLabel;
 @property(weak) IBOutlet UILabel		*followingLabel;
+@property(weak) IBOutlet UILabel		*userBiogLabel;
 
 @property(weak) IBOutlet UIButton				*followUnfollowButton;
 @property(weak) IBOutlet UIButton				*muteUnmuteButton;
@@ -58,6 +62,8 @@
 
 	self.userPostCountLabel.text = [NSString stringWithFormat:@"%@ posts", tempUser.postcount];
 
+	self.userBiogLabel.text = tempUser.desc_text;
+
 	XTImageObject * cover = tempUser.cover;
 	if(cover)
 	{
@@ -70,7 +76,7 @@
 	if(avatar)
 	{
 		[self.userImageView loadFromURL:avatar.url
-					   placeholderImage:[UIImage imageNamed:@"brownlinen"]
+					   placeholderImage:[UIImage imageNamed:@"unknown"]
 							  fromCache:(TMDiskCache*)[XTAppDelegate sharedInstance].userProfilePicCache];
 	}
 
@@ -106,8 +112,6 @@
 		self.followUnfollowButton.hidden = NO;
 	}
 
-	self.followersLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Followers: %d", @""), [tempUser.followers integerValue]];
-	self.followingLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Following: %d", @""), [tempUser.following integerValue]];
 }
 
 -(id)initWithUserID:(NSString*)userid
@@ -134,6 +138,13 @@
                                                bundle:[NSBundle mainBundle]]
          forCellReuseIdentifier:@"timelineCell"];
 
+	[self.tableView registerNib:[UINib nibWithNibName:@"XTProfileBioCell"
+                                               bundle:[NSBundle mainBundle]]
+         forCellReuseIdentifier:@"bioCell"];
+
+	[self.tableView registerNib:[UINib nibWithNibName:@"XTProfileFollowCell"
+                                               bundle:[NSBundle mainBundle]]
+         forCellReuseIdentifier:@"followCell"];
 
 	[[NSBundle mainBundle] loadNibNamed:@"XTProfileHeader"
                                   owner:self
@@ -245,41 +256,115 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return self.postsFetchedResultsController.sections.count;
+    return 1+self.postsFetchedResultsController.sections.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-	id <NSFetchedResultsSectionInfo> sectionInfo = [self.postsFetchedResultsController.sections objectAtIndex:section];
-	return [sectionInfo numberOfObjects];
+	if(section == 0)
+	{
+		return 3;
+	}
+	
+	if(section == 1)
+	{
+		id <NSFetchedResultsSectionInfo> sectionInfo = [self.postsFetchedResultsController.sections objectAtIndex:0];
+		return [sectionInfo numberOfObjects];
+	}
+
+	return 0;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	Post * post = [self.postsFetchedResultsController objectAtIndexPath:indexPath];
-	return [XTTimelineCell cellHeightForPost:post];
+	if(indexPath.section == 0)
+	{
+		User * tempUser;
+		if(self.userfetchedResultsController.fetchedObjects.count)
+			tempUser = [self.userfetchedResultsController.fetchedObjects lastObject];
+
+		if(indexPath.row == 0)
+		{
+			//calculate
+			return [XTProfileBioCell heightForText:tempUser.desc_text];
+		}
+		else
+			return 48;
+	}
+
+	if(indexPath.section == 1)
+	{
+		Post * post = [self.postsFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:0]];
+		return [XTTimelineCell cellHeightForPost:post];
+	}
+
+	return 60;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	Post * post = [self.postsFetchedResultsController objectAtIndexPath:indexPath];
-
-	XTTimelineCell *cell = [tableView dequeueReusableCellWithIdentifier:@"timelineCell"];
-
-	cell.post = post;
-
-	cell.quickReplyBlock = ^(Post * post)
+	if(indexPath.section == 0)
 	{
-		XTNewPostViewController * npvc = [[XTNewPostViewController alloc] init];
-		npvc.replyToPost = post;
+		User * tempUser;
+		if(self.userfetchedResultsController.fetchedObjects.count)
+			tempUser = [self.userfetchedResultsController.fetchedObjects lastObject];
 
-		[self presentViewController:[[UINavigationController alloc] initWithRootViewController:npvc]
-						   animated:YES
-						 completion:nil];
-	};
+		if(indexPath.row == 0)
+		{
 
-	return cell;
+
+			XTProfileBioCell * bioCell = [tableView dequeueReusableCellWithIdentifier:@"bioCell"];
+
+			if(tempUser)
+				bioCell.bioLabel.text = tempUser.desc_text;
+			else
+				bioCell.bioLabel.text = @"";
+
+			return bioCell;
+		}
+
+		if(indexPath.row == 1)
+		{
+			XTProfileFollowCell * followingCell = [tableView dequeueReusableCellWithIdentifier:@"followCell"];
+
+			[followingCell setFollowingCount:tempUser.following];
+
+			return followingCell;
+		}
+
+		if(indexPath.row == 2)
+		{
+			XTProfileFollowCell * followerCell = [tableView dequeueReusableCellWithIdentifier:@"followCell"];
+
+			[followerCell setFollowedCount:tempUser.followers];
+
+			return followerCell;
+		}
+
+	}
+
+
+	if(indexPath.section == 1)
+	{
+		Post * post = [self.postsFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:0]];
+
+		XTTimelineCell *cell = [tableView dequeueReusableCellWithIdentifier:@"timelineCell"];
+
+		cell.post = post;
+
+		cell.quickReplyBlock = ^(Post * post)
+		{
+			XTNewPostViewController * npvc = [[XTNewPostViewController alloc] init];
+			npvc.replyToPost = post;
+
+			[self presentViewController:[[UINavigationController alloc] initWithRootViewController:npvc]
+							   animated:YES
+							 completion:nil];
+		};
+
+		return cell;
+	}
 }
 
 
@@ -299,7 +384,7 @@
 
 		CGRect rect = self.headerView.frame;
 		rect.origin.y = MIN(0, scrollView.contentOffset.y);
-		rect.size.height = 220 + extra;
+		rect.size.height = 170 + extra;
 		self.headerView.frame = rect;
 	}
 }
@@ -377,6 +462,7 @@
 	else
 	{
 		[self setupHeader];
+		[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
 	}
 }
 
@@ -386,8 +472,14 @@
 	if(controller == self.userfetchedResultsController)
 	{
 		[self setupHeader];
+		[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
 		return;
 	}
+
+	// override the default to put the details in section 0
+	// I wish apple actually made this easy :(
+	indexPath		= [NSIndexPath indexPathForRow:indexPath.row inSection:1];
+	newIndexPath	= [NSIndexPath indexPathForRow:newIndexPath.row inSection:1];
 
 	//ok now we do the funky table stuff!
 	UITableView *tableView = self.tableView;

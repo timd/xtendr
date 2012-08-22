@@ -121,11 +121,6 @@
 		XTTimelineCell *cell = [tableView dequeueReusableCellWithIdentifier:@"timelineCell"];
 
 		cell.post = post;
-		cell.faceTapBlock = ^(Post * post)
-		{
-			XTProfileViewController * pvc = [[XTProfileViewController alloc] initWithUserID:post.userid];
-			[self.navigationController pushViewController:pvc animated:YES];
-		};
 
 		cell.quickReplyBlock = ^(Post * post)
 		{

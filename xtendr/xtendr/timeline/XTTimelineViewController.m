@@ -234,7 +234,7 @@
 	}
 
 	[self.headerBackgroundView loadFromURL:[XTProfileController sharedInstance].profileUser.cover_image.url
-						  placeholderImage:nil
+						  placeholderImage:[UIImage imageNamed:@"brownlinen"]
 								 fromCache:[XTAppDelegate sharedInstance].userCoverArtCache];
 }
 
@@ -271,11 +271,6 @@
 	XTTimelineCell *cell = [tableView dequeueReusableCellWithIdentifier:@"timelineCell"];
 
 	cell.post = post;
-	cell.faceTapBlock = ^(Post * post)
-	{
-		XTProfileViewController * pvc = [[XTProfileViewController alloc] initWithUserID:post.userid];
-		[self.navigationController pushViewController:pvc animated:YES];
-	};
 
 	cell.quickReplyBlock = ^(Post * post)
 	{
@@ -690,7 +685,7 @@
 -(void)profileRefreshed:(NSNotification*)note
 {
 	[self.headerBackgroundView loadFromURL:[XTProfileController sharedInstance].profileUser.cover_image.url
-						  placeholderImage:nil
+						  placeholderImage:[UIImage imageNamed:@"brownlinen"]
 								 fromCache:[XTAppDelegate sharedInstance].userCoverArtCache];
 }
 
@@ -700,29 +695,12 @@
 
 #pragma mark - fetched results stuff
 
-
-
-
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
     //Lets the tableview know we're potentially doing a bunch of updates.
 	DLog(@"controllerWillChangeContent");
 	//[self.tableView beginUpdates];
 	self.lastRefreshLabel.text = NSLocalizedString(@"Processing Changes....", @"");
-
-	/*
-	 CGPoint oldOffset = self.tableView.contentOffset;
-	 oldOffset.y -= self.headerView.bounds.size.height;
-	 DLog(@"oldOffset = %@", NSStringFromCGPoint(oldOffset));
-
-	 self.indexPathAtTopForUpdate = [self.tableView indexPathForRowAtPoint:oldOffset];
-
-	 if(!self.indexPathAtTopForUpdate)
-	 self.indexPathAtTopForUpdate = [NSIndexPath indexPathForRow:0 inSection:0];
-
-	 DLog(@"path = %@", self.indexPathAtTopForUpdate);
-	 */
-
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
@@ -788,7 +766,7 @@
     }
 }
 
-#pragma mark - expandableNavigationDelegate
+#pragma mark - Post adding!
 
 -(IBAction)addThought:(id)sender
 {
@@ -841,6 +819,7 @@
 
 }
 
+#pragma mark - expandable navigation delegate
 
 -(NSArray*)itemsForExpandableNavigation:(ExpandableNavigation*)nav
 {

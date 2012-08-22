@@ -187,10 +187,8 @@
 -(IBAction)userPhotoTapped:(id)sender
 {
 	DLog(@"USER PHOTO TAPPED!");
-	if(self.faceTapBlock)
-	{
-		self.faceTapBlock(_post);
-	}
+
+	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"xtendr://showuser/%@", _post.user.id]]];
 }
 
 -(IBAction)quickReplyTapped:(id)sender
