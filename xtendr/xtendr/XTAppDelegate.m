@@ -115,7 +115,6 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
     self.window.backgroundColor = [UIColor blackColor];
     [self.window makeKeyAndVisible];
 
-
 	[[NSNotificationCenter defaultCenter] addObserverForName:kXTProfileValidityChangedNotification
                                                       object:nil
                                                        queue:nil
