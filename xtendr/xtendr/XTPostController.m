@@ -189,7 +189,7 @@
 
 -(void)backgroundAddPostArray:(NSArray*)postArray fromMyStream:(BOOL)myStream fromMentions:(BOOL)mentions
 {
-	NSManagedObjectContext * context = [[NSManagedObjectContext alloc] init];
+	NSManagedObjectContext * context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSConfinementConcurrencyType];
 	[context setPersistentStoreCoordinator:[XTAppDelegate sharedInstance].persistentStoreCoordinator];
 
 	for (NSDictionary * postDict in postArray)
@@ -207,7 +207,7 @@
 
 -(void)backgroundAddPost:(NSDictionary*)postDict fromMyStream:(BOOL)myStream fromMentions:(BOOL)mentions
 {
-	NSManagedObjectContext * context = [[NSManagedObjectContext alloc] init];
+	NSManagedObjectContext * context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSConfinementConcurrencyType];
 	[context setPersistentStoreCoordinator:[XTAppDelegate sharedInstance].persistentStoreCoordinator];
 
 	[self internalPostStuff:postDict inContext:context isMention:mentions isMyStream:myStream];

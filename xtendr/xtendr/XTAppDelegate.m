@@ -145,6 +145,7 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 	[self.userProfilePicCache trimCache];
 
 	//TODO: trim core data stuff
+	[self.managedObjectContext reset];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -400,7 +401,7 @@ NSString *kANAPIClientID	= @"zkQLXuAgUa2SF8Ws3G6SVhdHtsyTkq3x";
 
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if (coordinator != nil) {
-        _managedObjectContext = [[NSManagedObjectContext alloc] init];
+        _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
         [_managedObjectContext setPersistentStoreCoordinator:coordinator];
     }
     return _managedObjectContext;

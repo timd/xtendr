@@ -52,6 +52,7 @@
 {
     [self.parentVC dismissViewControllerAnimated:YES
 									  completion:^{
+										  self.navController = nil;
 									  }];
 }
 

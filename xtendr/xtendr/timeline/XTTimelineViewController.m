@@ -23,9 +23,12 @@
 
 #import "XTPhotoPostController.h"
 
+#import "NACaptureViewController.h"
+
+
 #define POST_LIMIT	20
 
-@interface XTTimelineViewController () <ExpandableNavigationDelegate, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
+@interface XTTimelineViewController () <ExpandableNavigationDelegate, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate, NACaptureDelegate>
 
 @property(weak)	IBOutlet UIView					*headerView;
 @property(weak) IBOutlet UILabel				*releaseToRefreshLabel;
@@ -54,9 +57,6 @@
 @property(strong) NSIndexPath					*indexPathAtTopForUpdate;
 
 @property(strong) ExpandableNavigation			*navigation;
-
-@property(strong) XTPhotoPostController			*photoPoster;
-
 
 @end
 
@@ -710,18 +710,18 @@
 	//[self.tableView beginUpdates];
 	self.lastRefreshLabel.text = NSLocalizedString(@"Processing Changes....", @"");
 
-/*
-	CGPoint oldOffset = self.tableView.contentOffset;
-	oldOffset.y -= self.headerView.bounds.size.height;
-	DLog(@"oldOffset = %@", NSStringFromCGPoint(oldOffset));
+	/*
+	 CGPoint oldOffset = self.tableView.contentOffset;
+	 oldOffset.y -= self.headerView.bounds.size.height;
+	 DLog(@"oldOffset = %@", NSStringFromCGPoint(oldOffset));
 
-	self.indexPathAtTopForUpdate = [self.tableView indexPathForRowAtPoint:oldOffset];
+	 self.indexPathAtTopForUpdate = [self.tableView indexPathForRowAtPoint:oldOffset];
 
-	if(!self.indexPathAtTopForUpdate)
-		self.indexPathAtTopForUpdate = [NSIndexPath indexPathForRow:0 inSection:0];
+	 if(!self.indexPathAtTopForUpdate)
+	 self.indexPathAtTopForUpdate = [NSIndexPath indexPathForRow:0 inSection:0];
 
-	DLog(@"path = %@", self.indexPathAtTopForUpdate);
- */
+	 DLog(@"path = %@", self.indexPathAtTopForUpdate);
+	 */
 
 }
 
@@ -803,12 +803,44 @@
 
 -(IBAction)addPhoto:(id)sender
 {
-	self.photoPoster = [[XTPhotoPostController alloc] init];
-
-	[self.photoPoster presentWithParent:self];
-
 	[self.navigation collapse];
+
+
+	NACaptureViewController * cvc = [[NACaptureViewController alloc] init];
+
+	cvc.capturedelegate = self;
+
+	cvc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+
+	[self presentViewController:[[UINavigationController alloc] initWithRootViewController:cvc]
+					   animated:YES
+					 completion:^{
+					 }];
 };
+
+-(void)captureViewControllerDidCancel:(NACaptureViewController *)captureView
+{
+    [self dismissViewControllerAnimated:YES
+							 completion:^{
+							 }];
+}
+
+-(void)captureViewController:(NACaptureViewController *)captureView didCaptureImage:(UIImage *)image
+{
+	//NOW that we have the video thumbnail
+	// make the attachment dictionaries and push the final step controller on the stack!
+
+	XTNewPostViewController * npvc = [[XTNewPostViewController alloc] init];
+
+	npvc.imageAttachment = image;
+
+	UINavigationController * navcon = (UINavigationController *)self.presentedViewController;
+
+	[navcon pushViewController:npvc
+					  animated:YES];
+
+}
+
 
 -(NSArray*)itemsForExpandableNavigation:(ExpandableNavigation*)nav
 {

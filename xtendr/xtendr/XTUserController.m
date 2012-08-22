@@ -178,7 +178,7 @@
 //stuff to process on a background thread so we dont hang the UI too much
 -(void)backgroundAddUserArray:(NSArray*)userArray
 {
-	NSManagedObjectContext * context = [[NSManagedObjectContext alloc] init];
+	NSManagedObjectContext * context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSConfinementConcurrencyType];
 	[context setPersistentStoreCoordinator:[XTAppDelegate sharedInstance].persistentStoreCoordinator];
 
 	for (NSDictionary * userDict in userArray)
@@ -196,7 +196,7 @@
 
 -(void)backgroundAddUser:(NSDictionary*)userDict
 {
-	NSManagedObjectContext * context = [[NSManagedObjectContext alloc] init];
+	NSManagedObjectContext * context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSConfinementConcurrencyType];
 	[context setPersistentStoreCoordinator:[XTAppDelegate sharedInstance].persistentStoreCoordinator];
 
 	[self insertUser:userDict inContext:context];
