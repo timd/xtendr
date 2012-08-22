@@ -14,6 +14,7 @@
 @interface NACaptureViewController : UIViewController
 
 @property(weak) id<NACaptureDelegate> capturedelegate;
+@property(assign) BOOL	allowsEditing;
 
 @end
 

@@ -821,7 +821,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     self.libraryPickerController.delegate      = self;
     self.libraryPickerController.sourceType    = UIImagePickerControllerSourceTypePhotoLibrary;
     self.libraryPickerController.mediaTypes    = [[NSArray alloc] initWithObjects: (NSString *) kUTTypeImage, nil];
-    self.libraryPickerController.allowsEditing = YES;
+    self.libraryPickerController.allowsEditing = self.allowsEditing;
 
 	[self.session stopRunning];
 
@@ -919,8 +919,14 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
+	
 //	UIImage * originalImage = [info objectForKey:UIImagePickerControllerOriginalImage];
-	UIImage * originalImage = [info objectForKey:UIImagePickerControllerEditedImage];
+	UIImage * originalImage;
+
+	if(self.allowsEditing)
+		originalImage = [info objectForKey:UIImagePickerControllerEditedImage];
+	else
+		originalImage = [info objectForKey:UIImagePickerControllerOriginalImage];
 
 	DLog(@"Rect = %@, orientation= %d", NSStringFromCGSize(originalImage.size), originalImage.imageOrientation);
 

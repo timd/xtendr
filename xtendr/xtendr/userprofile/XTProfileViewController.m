@@ -26,6 +26,9 @@
 #import "XTProfileBioCell.h"
 #import "XTProfileFollowCell.h"
 
+
+#import "XTFollowListViewController.h"
+
 @interface XTProfileViewController () <NSFetchedResultsControllerDelegate>
 
 @property(weak) IBOutlet UIView			*headerView;
@@ -56,60 +59,70 @@
 	User * tempUser;
 
 	if(self.userfetchedResultsController.fetchedObjects.count)
+	{
 		tempUser = [self.userfetchedResultsController.fetchedObjects lastObject];
 
-	self.userNameLabel.text = [NSString stringWithFormat:@"%@ (%@)", tempUser.username, tempUser.id];
+		self.userNameLabel.text = [NSString stringWithFormat:@"%@ (%@)", tempUser.username, tempUser.id];
 
-	self.userPostCountLabel.text = [NSString stringWithFormat:@"%@ posts", tempUser.postcount];
+		self.userPostCountLabel.text = [NSString stringWithFormat:@"%@ posts", tempUser.postcount];
 
-	self.userBiogLabel.text = tempUser.desc_text;
+		self.userBiogLabel.text = tempUser.desc_text;
 
-	XTImageObject * cover = tempUser.cover;
-	if(cover)
+		XTImageObject * cover = tempUser.cover;
+		if(cover)
+		{
+			[self.headerBackgroundImageView loadFromURL:cover.url
+									   placeholderImage:[UIImage imageNamed:@"brownlinen"]
+											  fromCache:(TMDiskCache*)[XTAppDelegate sharedInstance].userCoverArtCache];
+		}
+
+		XTImageObject * avatar = tempUser.avatar;
+		if(avatar)
+		{
+			[self.userImageView loadFromURL:avatar.url
+						   placeholderImage:[UIImage imageNamed:@"unknown"]
+								  fromCache:(TMDiskCache*)[XTAppDelegate sharedInstance].userProfilePicCache];
+		}
+
+		if([tempUser.you_follow boolValue])
+		{
+			[self.followUnfollowButton setTitle:NSLocalizedString(@"Unfollow", @"")
+									   forState:UIControlStateNormal];
+		}
+		else
+		{
+			[self.followUnfollowButton setTitle:NSLocalizedString(@"Follow", @"")
+									   forState:UIControlStateNormal];
+		}
+
+		if([tempUser.you_muted boolValue])
+		{
+			[self.muteUnmuteButton setTitle:NSLocalizedString(@"Unmute", @"")
+								   forState:UIControlStateNormal];
+		}
+		else
+		{
+			[self.muteUnmuteButton setTitle:NSLocalizedString(@"mute", @"")
+								   forState:UIControlStateNormal];
+		}
+
+		if([[XTProfileController sharedInstance].profileUser.id isEqual:tempUser.id])
+		{
+			//THIS IS US!!!
+			self.followUnfollowButton.hidden = YES;
+		}
+		else
+		{
+			self.followUnfollowButton.hidden = NO;
+		}
+	}
+	else
 	{
-		[self.headerBackgroundImageView loadFromURL:cover.url
+		self.userNameLabel.text = NSLocalizedString(@"Getting details..", @"");
+		[self.headerBackgroundImageView loadFromURL:nil
 								   placeholderImage:[UIImage imageNamed:@"brownlinen"]
 										  fromCache:(TMDiskCache*)[XTAppDelegate sharedInstance].userCoverArtCache];
-	}
 
-	XTImageObject * avatar = tempUser.avatar;
-	if(avatar)
-	{
-		[self.userImageView loadFromURL:avatar.url
-					   placeholderImage:[UIImage imageNamed:@"unknown"]
-							  fromCache:(TMDiskCache*)[XTAppDelegate sharedInstance].userProfilePicCache];
-	}
-
-	if([tempUser.you_follow boolValue])
-	{
-		[self.followUnfollowButton setTitle:NSLocalizedString(@"Unfollow", @"")
-								   forState:UIControlStateNormal];
-	}
-	else
-	{
-		[self.followUnfollowButton setTitle:NSLocalizedString(@"Follow", @"")
-								   forState:UIControlStateNormal];
-	}
-
-	if([tempUser.you_muted boolValue])
-	{
-		[self.muteUnmuteButton setTitle:NSLocalizedString(@"Unmute", @"")
-							   forState:UIControlStateNormal];
-	}
-	else
-	{
-		[self.muteUnmuteButton setTitle:NSLocalizedString(@"mute", @"")
-							   forState:UIControlStateNormal];
-	}
-
-	if([[XTProfileController sharedInstance].profileUser.id isEqual:tempUser.id])
-	{
-		//THIS IS US!!!
-		self.followUnfollowButton.hidden = YES;
-	}
-	else
-	{
-		self.followUnfollowButton.hidden = NO;
 	}
 
 }
@@ -312,8 +325,6 @@
 
 		if(indexPath.row == 0)
 		{
-
-
 			XTProfileBioCell * bioCell = [tableView dequeueReusableCellWithIdentifier:@"bioCell"];
 
 			if(tempUser)
@@ -344,7 +355,6 @@
 
 	}
 
-
 	if(indexPath.section == 1)
 	{
 		Post * post = [self.postsFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:0]];
@@ -372,6 +382,21 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+	if(indexPath.section == 0)
+	{
+		if(indexPath.row == 1)
+		{
+			// show following
+			XTFollowListViewController * flvc = [[XTFollowListViewController alloc] initWithUserID:self.internalUserID showFollowers:NO];
+			[self.navigationController pushViewController:flvc animated:YES];
+		}
+		if(indexPath.row == 2)
+		{
+			//show followers
+			XTFollowListViewController * flvc = [[XTFollowListViewController alloc] initWithUserID:self.internalUserID showFollowers:YES];
+			[self.navigationController pushViewController:flvc animated:YES];
+		}
+	}
 }
 
 #pragma mark - View Scrolling header thing

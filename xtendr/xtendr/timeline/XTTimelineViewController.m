@@ -25,6 +25,7 @@
 
 #import "NACaptureViewController.h"
 
+#import "XTConversationViewController.h"
 
 #define POST_LIMIT	20
 
@@ -212,6 +213,15 @@
 	 }
 	 */
 
+	if(!self.doneInitialLoad)
+	{
+		[self loadPosts];
+	}
+	else
+	{
+		[self loadNewerPosts];
+	}
+
 }
 
 - (void)viewDidUnload
@@ -224,14 +234,6 @@
 {
 	[super viewWillAppear:animated];
 
-	if(!self.doneInitialLoad)
-	{
-		[self loadPosts];
-	}
-	else
-	{
-		[self loadNewerPosts];
-	}
 
 	[self.headerBackgroundView loadFromURL:[XTProfileController sharedInstance].profileUser.cover_image.url
 						  placeholderImage:[UIImage imageNamed:@"brownlinen"]
@@ -297,6 +299,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+	Post * post = [self.fetchedResultsController objectAtIndexPath:indexPath];
+
+	XTConversationViewController * cvc = [[XTConversationViewController alloc] initWithPost:post];
+
+	[self.navigationController pushViewController:cvc animated:YES];
 }
 
 #pragma mark - network stuff

@@ -75,6 +75,9 @@
 		5DA766C815E4E33C00CF69FA /* XTProfileFollowCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DA766C715E4E33C00CF69FA /* XTProfileFollowCell.m */; };
 		5DA766CB15E4E78E00CF69FA /* profilebadge.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DA766C915E4E78E00CF69FA /* profilebadge.png */; };
 		5DA766CC15E4E78E00CF69FA /* profilebadge@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DA766CA15E4E78E00CF69FA /* profilebadge@2x.png */; };
+		5DA766D815E51D5600CF69FA /* XTConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DA766D715E51D5600CF69FA /* XTConversationViewController.m */; };
+		5DA766DA15E53E8300CF69FA /* XTConversationHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DA766D915E53E8300CF69FA /* XTConversationHeader.xib */; };
+		5DA766DE15E542B500CF69FA /* XTFollowListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DA766DD15E542B500CF69FA /* XTFollowListViewController.m */; };
 		5DC2585E15E0DD94007F6EEE /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DC2585D15E0DD94007F6EEE /* Icon@2x.png */; };
 		5DC2586015E0DD9A007F6EEE /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DC2585F15E0DD9A007F6EEE /* Icon.png */; };
 		5DC2586215E0DDC1007F6EEE /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DC2586115E0DDC1007F6EEE /* Default@2x.png */; };
@@ -258,6 +261,11 @@
 		5DA766C715E4E33C00CF69FA /* XTProfileFollowCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTProfileFollowCell.m; sourceTree = "<group>"; };
 		5DA766C915E4E78E00CF69FA /* profilebadge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profilebadge.png; sourceTree = "<group>"; };
 		5DA766CA15E4E78E00CF69FA /* profilebadge@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profilebadge@2x.png"; sourceTree = "<group>"; };
+		5DA766D615E51D5600CF69FA /* XTConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTConversationViewController.h; sourceTree = "<group>"; };
+		5DA766D715E51D5600CF69FA /* XTConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTConversationViewController.m; sourceTree = "<group>"; };
+		5DA766D915E53E8300CF69FA /* XTConversationHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = XTConversationHeader.xib; sourceTree = "<group>"; };
+		5DA766DC15E542B500CF69FA /* XTFollowListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTFollowListViewController.h; sourceTree = "<group>"; };
+		5DA766DD15E542B500CF69FA /* XTFollowListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTFollowListViewController.m; sourceTree = "<group>"; };
 		5DC2585D15E0DD94007F6EEE /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		5DC2585F15E0DD9A007F6EEE /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		5DC2586115E0DDC1007F6EEE /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
@@ -440,6 +448,7 @@
 		5D8AFF9715DFBA39004241D5 /* xtendr */ = {
 			isa = PBXGroup;
 			children = (
+				5DA766DB15E541B700CF69FA /* followlist */,
 				5DA766BE15E4DA1500CF69FA /* conversation */,
 				5DA766BD15E4D27A00CF69FA /* cells */,
 				5DF0AF3415E2A9490093C081 /* feedback */,
@@ -672,8 +681,20 @@
 		5DA766BE15E4DA1500CF69FA /* conversation */ = {
 			isa = PBXGroup;
 			children = (
+				5DA766D615E51D5600CF69FA /* XTConversationViewController.h */,
+				5DA766D715E51D5600CF69FA /* XTConversationViewController.m */,
+				5DA766D915E53E8300CF69FA /* XTConversationHeader.xib */,
 			);
 			path = conversation;
+			sourceTree = "<group>";
+		};
+		5DA766DB15E541B700CF69FA /* followlist */ = {
+			isa = PBXGroup;
+			children = (
+				5DA766DC15E542B500CF69FA /* XTFollowListViewController.h */,
+				5DA766DD15E542B500CF69FA /* XTFollowListViewController.m */,
+			);
+			path = followlist;
 			sourceTree = "<group>";
 		};
 		5DC2586515E0EC66007F6EEE /* models */ = {
@@ -937,6 +958,7 @@
 				5DA766C215E4E0E800CF69FA /* XTProfileBioCell.xib in Resources */,
 				5DA766CB15E4E78E00CF69FA /* profilebadge.png in Resources */,
 				5DA766CC15E4E78E00CF69FA /* profilebadge@2x.png in Resources */,
+				5DA766DA15E53E8300CF69FA /* XTConversationHeader.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1003,6 +1025,8 @@
 				5DA766AF15E4414100CF69FA /* XTHashTagViewController.m in Sources */,
 				5DA766C515E4E32D00CF69FA /* XTProfileBioCell.m in Sources */,
 				5DA766C815E4E33C00CF69FA /* XTProfileFollowCell.m in Sources */,
+				5DA766D815E51D5600CF69FA /* XTConversationViewController.m in Sources */,
+				5DA766DE15E542B500CF69FA /* XTFollowListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

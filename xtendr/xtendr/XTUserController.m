@@ -50,6 +50,8 @@
 -(User*)insertUser:(NSDictionary*)userDict inContext:(NSManagedObjectContext*)context
 {
 	NSString * ID = [userDict valueForKey:@"id"];
+	if(!ID)
+		return nil;
 
 	User * user = [User userByID:ID inContext:context];
 	if(user)

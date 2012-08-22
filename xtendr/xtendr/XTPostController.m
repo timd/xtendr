@@ -230,6 +230,19 @@
 	});
 }
 
+-(void)addPostArray:(NSArray*)postArray fromMyStream:(BOOL)myStream fromMentions:(BOOL)mentions completion:(void (^)(void))completion
+{
+	if(postArray.count == 0)
+		return;
+
+	dispatch_async(_addQueue, ^{
+		[self backgroundAddPostArray:postArray fromMyStream:myStream fromMentions:mentions];
+
+		dispatch_async(dispatch_get_main_queue(), completion);
+	});
+}
+
+
 -(void)addPost:(NSDictionary*)postDict fromMyStream:(BOOL)myStream fromMentions:(BOOL)mentions
 {
 	dispatch_async(_addQueue, ^{
