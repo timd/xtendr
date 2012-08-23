@@ -16,6 +16,8 @@
 		5D590FA815E5670500FD8120 /* timescroll_pointer.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D590FA015E5670500FD8120 /* timescroll_pointer.png */; };
 		5D590FA915E5670500FD8120 /* timescroll_pointer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D590FA115E5670500FD8120 /* timescroll_pointer@2x.png */; };
 		5D590FAA15E5670500FD8120 /* TimeScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D590FA315E5670500FD8120 /* TimeScroller.m */; };
+		5D590FAE15E60B7B00FD8120 /* furley_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D590FAC15E60B7B00FD8120 /* furley_bg.png */; };
+		5D590FAF15E60B7B00FD8120 /* furley_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D590FAD15E60B7B00FD8120 /* furley_bg@2x.png */; };
 		5D8A000215DFE57B004241D5 /* XTTimelineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D8A000115DFE57B004241D5 /* XTTimelineCell.m */; };
 		5D8AFF9015DFBA39004241D5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D8AFF8F15DFBA39004241D5 /* UIKit.framework */; };
 		5D8AFF9215DFBA39004241D5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D8AFF9115DFBA39004241D5 /* Foundation.framework */; };
@@ -183,6 +185,8 @@
 		5D590FA115E5670500FD8120 /* timescroll_pointer@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "timescroll_pointer@2x.png"; sourceTree = "<group>"; };
 		5D590FA215E5670500FD8120 /* TimeScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeScroller.h; sourceTree = "<group>"; };
 		5D590FA315E5670500FD8120 /* TimeScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeScroller.m; sourceTree = "<group>"; };
+		5D590FAC15E60B7B00FD8120 /* furley_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = furley_bg.png; sourceTree = "<group>"; };
+		5D590FAD15E60B7B00FD8120 /* furley_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "furley_bg@2x.png"; sourceTree = "<group>"; };
 		5D8A000015DFE57B004241D5 /* XTTimelineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTTimelineCell.h; sourceTree = "<group>"; };
 		5D8A000115DFE57B004241D5 /* XTTimelineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTTimelineCell.m; sourceTree = "<group>"; };
 		5D8AFF8B15DFBA39004241D5 /* xtendr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = xtendr.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -638,6 +642,8 @@
 		5D8AFFE615DFDB96004241D5 /* graphics */ = {
 			isa = PBXGroup;
 			children = (
+				5D590FAC15E60B7B00FD8120 /* furley_bg.png */,
+				5D590FAD15E60B7B00FD8120 /* furley_bg@2x.png */,
 				5DF0AF3815E2ACB50093C081 /* brownlinen.png */,
 				5DF0AF3915E2ACB50093C081 /* brownlinen@2x.png */,
 				5D8E635E15DFFB4500DC11FF /* navigationbar.png */,
@@ -996,6 +1002,8 @@
 				5D590FA715E5670500FD8120 /* timescroll_minutehand@2x.png in Resources */,
 				5D590FA815E5670500FD8120 /* timescroll_pointer.png in Resources */,
 				5D590FA915E5670500FD8120 /* timescroll_pointer@2x.png in Resources */,
+				5D590FAE15E60B7B00FD8120 /* furley_bg.png in Resources */,
+				5D590FAF15E60B7B00FD8120 /* furley_bg@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

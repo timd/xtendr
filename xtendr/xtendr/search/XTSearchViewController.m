@@ -48,7 +48,7 @@
 {
     [super viewDidLoad];
 
-	self.tableView.backgroundColor	= [UIColor colorWithPatternImage:[UIImage imageNamed:@"timelineback"]];
+	self.tableView.backgroundColor	= [UIColor colorWithPatternImage:[UIImage imageNamed:@"furley_bg"]];
 	self.tableView.separatorStyle	= UITableViewCellSeparatorStyleNone;
 
 	[self.tableView registerNib:[UINib nibWithNibName:@"XTTimelineCell"
